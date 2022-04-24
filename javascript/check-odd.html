@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            text-align: center;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nhập số để kiểm tra chẵn/lẻ</h1>
+    <input type="text" id="input" value="0">
+    <button id="btn">Kiểm tra</button>
+    <hr>
+    <p id="result"></p>
+</body>
+<script>
+    document.getElementById("btn").addEventListener("click",function(){
+        let number = parseInt(document.getElementById("input").value);
+        if (number%2==0) {
+            document.getElementById("result").innerHTML = number + " là số chẵn";
+        } else document.getElementById("result").innerHTML = number + " là số lẻ";
+    })
+</script>
+</html>
