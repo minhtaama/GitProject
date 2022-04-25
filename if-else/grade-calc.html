@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính điểm khối D</title>
+    <style>
+        body {
+            max-width: max-content;
+            margin: 0 auto 0 auto;
+            text-align: center;
+        }
+        label {
+            display: block;
+            text-align: left;
+        }
+        table {
+            margin: 0 auto 0 auto;
+        }
+        button {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tính điểm đại học khối D</h1>
+    <table>
+        <tr>
+            <td><label for="math">Điểm môn Toán</label></td>
+            <td><input type="text" id="math" name="grade" value="0"></td>
+        </tr>   
+        <tr>
+            <td><label for="literature">Điểm môn Văn</label></td>
+            <td><input type="text" id="literature" name="grade" value="0"></td>
+        </tr>
+        <tr>
+            <td><label for="english">Điểm môn Anh</label></td>
+            <td><input type="text" id="english" name="grade" value="0"><br></td>
+        </tr>
+        <tr>
+            <td><label for="zone">Khu vực</label></td>
+            <td><select name="zone" id="zone">
+                <option value="kv1">KV1</option>
+                <option value="kv2">KV2</option>
+                <option value="kv2nt">KV2-NT</option>
+                <option value="kvv3">KV3</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td colspan="2"><button id="btn">Tính điểm</button></td>
+        </tr>
+    </table>
+    <p id="result"></p>
+</body>
+<script>
+    document.getElementById("btn").addEventListener("click", () => {
+        let grades = document.getElementsByName("grade");
+        let sum = Number((parseFloat(grades[0].value) + parseFloat(grades[1].value) + parseFloat(grades[2].value)).toFixed(2));
+        let zone = document.getElementById("zone").value;
+        switch (zone) {
+            case "kv1":
+                sum += 0.75;
+                break;
+            case "kv2nt":
+                sum += 0.5;
+                break;
+            case "kv2":
+                sum += 0.25;
+                break;
+        }
+        document.getElementById("result").innerHTML = "Tổng điểm đại học khối D của bạn là: " + sum;
+    });
+</script>
+</html>
