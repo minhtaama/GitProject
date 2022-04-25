@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Price</title>
+    <style>
+        body {
+            max-width: max-content;
+            margin: 0 auto 0 auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Giá hoa quả</h1>
+    <input type="text" id="input" name="input">
+    <button id="btn">Xem giá</button>
+    <p id="result">Nhập tên loại hoa quả: Ổi, Dưa Hấu, Táo, Xoài, Cam, Chôm Chôm, Măng Cụt </p>
+</body>
+<script>
+    document.getElementById("btn").addEventListener("click", () => {
+        let fruit = document.getElementById("input").value;
+        console.log(fruit);
+        let result = document.getElementById("result");
+        console.log(result);
+        switch (fruit) {
+            case "Ổi":
+                result.innerHTML = "20.000 VNĐ/kg";
+                break;
+            case "Dưa Hấu":
+                result.innerHTML = "20.000 VNĐ/kg";
+                break;
+            case "Táo":
+                result.innerHTML = "30.000 VNĐ/kg";
+                break;
+            case "Xoài":
+                result.innerHTML = "30.000 VNĐ/kg";
+                break;
+            case "Cam":
+                result.innerHTML = "40.000 VNĐ/kg";
+                break;
+            case "Chôm Chôm":
+                result.innerHTML = "40.000 VNĐ/kg";
+                break;
+            case "Măng Cụt":
+                result.innerHTML = "50.000 VNĐ/kg";
+                break;
+            default:
+                result.innerHTML = "Không có loại hoa quả này<br>Nhập tên loại hoa quả: Ổi, Dưa Hấu, Táo, Xoài, Cam, Chôm Chôm, Măng Cụt"
+        }
+    });
+</script>
+</html>
