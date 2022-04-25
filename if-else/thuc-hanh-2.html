@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p id="result"></p>
+</body>
+<script>
+    let username = prompt("Please input username");
+    let result = document.getElementById("result");
+    if (username == "Admin") {
+        let password = prompt("Please input password:");
+        switch (password) {
+            case "The Master":
+                result.innerHTML = "<b>Welcome</b>";
+                break;
+            case null:
+                result.innerHTML = "<b>Canceled</b>";
+                break;
+            default:
+                result.innerHTML = "<b>Wrong Password</b>"
+        }
+    } else if (username == null) {
+        result.innerHTML = "<b>Canceled</b>" 
+    } else result.innerHTML = "I don't know you"
+</script>
+</html>
