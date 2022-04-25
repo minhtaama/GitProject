@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính điểm khối D</title>
+    <style>
+        body {
+            max-width: max-content;
+            margin: 0 auto 0 auto;
+            text-align: center;
+        }
+        label {
+            display: block;
+            text-align: left;
+        }
+        table {
+            margin: 0 auto 0 auto;
+        }
+        button {
+            margin-top: 20px;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tính năm âm lịch</h1>
+    <table>
+        <tr>
+            <td><label for="year">Nhập năm dương lịch</label></td>
+            <td><input type="number" id="year" value="1997"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><button id="btn">Tính năm âm lịch</button></td>
+        </tr>
+    </table>
+    <p id="result"></p>
+</body>
+<script>
+    document.getElementById("btn").addEventListener("click", () => {
+        let year = document.getElementById("year").value;
+        let canNumber = year % 10,
+            chiNumber = year % 12,
+            can = "",
+            chi = "";
+        switch (canNumber) {
+            case 0: can = "Canh"; break;
+            case 1: can = "Tân"; break;
+            case 2: can = "Nhâm"; break;
+            case 3: can = "Quý"; break;
+            case 4: can = "Giáp"; break;
+            case 5: can = "Ất"; break;
+            case 6: can = "Bính"; break;
+            case 7: can = "Đinh"; break;
+            case 8: can = "Mậu"; break;
+            case 9: can = "Kỷ"; break;
+        }
+        switch (chiNumber) {
+            case 0: chi = "Thân"; break;
+            case 1: chi = "Dậu"; break;
+            case 2: chi = "Tuất"; break;
+            case 3: chi = "Hợi"; break;
+            case 4: chi = "Tý"; break;
+            case 5: chi = "Sửu"; break;
+            case 6: chi = "Dần"; break;
+            case 7: chi = "Mão"; break;
+            case 8: chi = "Thìn"; break;
+            case 9: chi = "Tỵ"; break;
+            case 10: chi = "Ngọ"; break;
+            case 11: chi = "Mùi"; break;
+        }
+        document.getElementById("result").innerHTML = "Năm âm lịch tương ứng: " + can + " " + chi;
+    });
+</script>
+</html>
