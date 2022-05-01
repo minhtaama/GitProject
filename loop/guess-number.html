@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUESS THE number</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        button {
+            margin-top: 200px;
+            border: 1px solid brown;
+            background-color: brown;
+            color: aliceblue;
+            border-radius: 1rem;
+            padding: 50px;
+            font-size: larger;
+        }
+        button:hover {
+            background-color: aquamarine;
+            border: 1px solid aquamarine;
+            color:black;
+        }
+        button:active {
+            background-color: rgb(27, 252, 177);
+            border: 1px solid rgb(27, 252, 177);
+        }
+    </style>
+</head>
+<body>
+    <button id="play">CHƠI TRÒ CHƠI ĐOÁN SỐ NÀOOOOOOOOOOOOOOO</button>
+</body>
+</html>
+<script>
+    document.getElementById("play").addEventListener("click", () => {
+        let maxPrompt = prompt("Nhập khoảng")
+            max = parseInt(maxPrompt);
+        if (maxPrompt == null) {
+            return alert ("Không nhập số ah?");
+        } else if (/[A-Za-z]/.test(max)) {
+            return alert("Nhập ký tự gì vậy??");
+        }
+        let result = Math.floor(Math.random()*max);
+        let i = 1,
+            input = prompt("Nhập số mà bạn đoán (lần " + i + "). Đáp án trong khoảng từ 0 đến " + max);
+        i++;
+        if (input == null || max == null) {
+            alert ("Không nhập số ah?");
+        }
+        else {
+            while (i<=3) {
+                if (input != null && parseInt(input)) {
+                    if (/[A-Za-z]/.test(input)) {
+                        alert ("Nhập ký tự gì thế?");
+                        break;
+                    }
+                    if (input < result) {
+                        input = prompt("Đoán lại đi, đáp án lớn hơn số bạn đoán (lần " + i + "). Đáp án trong khoảng từ 0 đến " + max);
+                        i++;
+                    } if (input > result && input <= max) {
+                        input = prompt("Đoán lại đi, đáp án nhỏ hơn số bạn đoán (lần " + i + "). Đáp án trong khoảng từ 0 đến " + max);
+                        i++;
+                    } if (input > max) {
+                        input = prompt("Bạn nhập số còn lớn hơn cả khoảng??? (lần " + i + "). Đáp án trong khoảng từ 0 đến " + max);
+                        i++;
+                    } if (input == result) {
+                        alert("Chúc mừng! bạn đã đoán đúng");
+                        break;
+                    }
+                } else {
+                    alert ("Không nhập số ah?");
+                    break;
+                }
+            }
+            if(i>3) {
+                alert("Bạn đã thua do đoán quá 3 lần! Đáp án là " + result);
+            }
+        }
+    });
+</script>

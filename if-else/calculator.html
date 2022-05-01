@@ -168,7 +168,7 @@
                 }
             }
         }
-        switch (oprt) {                                                      //gán nút toán tử vào giá trị của currOprt, trừ nút "="
+        switch (oprt) { //gán nút toán tử vào giá trị của currOprt, trừ nút "="
             case "+":
                 currOprt = "+";
                 input.innerText = "0";
@@ -186,7 +186,7 @@
                 input.innerText = "0";
                 break;
         }
-        if (oprt == "=") {                                              //Nếu ấn nút "="
+        if (oprt == "=") { //Nếu ấn nút "="
             switch(currOprt) {
                 case "+":
                     currentNum += parseInt(input.innerText);
