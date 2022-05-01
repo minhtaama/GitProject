@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUESS THE number</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        button {
+            margin-top: 10px;
+            border: 1px solid brown;
+            background-color: brown;
+            color: aliceblue;
+            border-radius: 1rem;
+            padding: 30px;
+            font-size: larger;
+        }
+        button:hover {
+            background-color: aquamarine;
+            border: 1px solid aquamarine;
+            color:black;
+        }
+        button:active {
+            background-color: rgb(27, 252, 177);
+            border: 1px solid rgb(27, 252, 177);
+        }
+        input {
+            margin-top: 10px;
+            width: 300px;
+            text-align: center;
+            font-size: 2rem;
+            border: 3px solid;
+            border-radius: 1rem;
+            padding: 10px;
+        }
+        span {
+            color: red;
+        }
+        div {
+            margin: 0 auto 0 auto;
+            max-width: 450px;
+        }
+        p {
+            text-align: left;
+            font-size: 1.5rem;
+        }
+        #title {
+            font-weight: 900;
+        }
+    </style>
+</head>
+<body>
+    <h1>FIBONACCI</h1>
+    <input type="number" id="max" placeholder="Nhập số vào đây">
+    <br>
+    <button id="play">ẤN VÀO ĐÂY</button>
+    <div>
+        <p id="title"></p>
+        <p id="result"></p>
+    </div>
+</body>
+</html>
+<script>
+    document.getElementById("play").addEventListener("click", () => {
+        let max = document.getElementById("max").value;
+        let result = document.getElementById("result");
+        let agree = true;
+        if (max > 300) {
+            agree = confirm("NHIỀU SỐ THẾ NÀY LÀ LAG ĐẤY!!!!!!!!!!!!!");
+        }
+        if (agree){
+            document.getElementById("title").innerHTML = max + " SỐ FIBONACI ĐẦU TIÊN:"
+            result.innerHTML = "Số thứ 1: <span>1</span> <br>";
+            let i = 1,
+                before = 0,
+                temp = 0;
+                count = 1;
+            do {
+                before = i;
+                i = i + temp;
+                temp = before;
+                result.innerHTML += "Số thứ " + (count+1) + ": <span>" + i + "</span>" + "<br>";
+                count++
+            } while (count < max);
+        }
+        console.log(confirm)
+    });
+</script>
