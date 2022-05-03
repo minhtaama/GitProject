@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIBONACCI</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        button {
+            margin-top: 10px;
+            border: 1px solid brown;
+            background-color: brown;
+            color: aliceblue;
+            border-radius: 1rem;
+            padding: 30px;
+            font-size: larger;
+        }
+        button:hover {
+            background-color: aquamarine;
+            border: 1px solid aquamarine;
+            color:black;
+        }
+        button:active {
+            background-color: rgb(27, 252, 177);
+            border: 1px solid rgb(27, 252, 177);
+        }
+        table {
+            margin: 2rem auto 0 auto;
+            text-align: left;
+            font-size: 1.2rem;
+            border: 1px solid black;
+        }
+        tr, td {
+            border: 1px solid black;
+            width: 150px;
+            padding: 0.2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>BẢNG CỬU CHƯƠNG</h1>
+    <br>
+    <button id="play">ẤN NÚT ĐỂ SINH BẢNG CỬU CHƯƠNG</button>
+    <table id="table"></table>
+</body>
+</html>
+<script>
+    let count = 1;
+    document.getElementById("play").addEventListener("click", () => {
+        if(count == 1) {
+            for (let i = 1; i<=9; i++) {
+                let table = document.getElementById("table");
+                let tr = document.createElement("tr");
+                let newRow = table.appendChild(tr);
+                for (let j = 2; j<=9; j++) {
+                    let td = document.createElement("td");
+                    let newCol = newRow.appendChild(td);
+                    newCol.innerHTML = j + "x" + i + "=" + (j*i);
+                }
+            }
+        }
+        count--;
+    });
+</script>
