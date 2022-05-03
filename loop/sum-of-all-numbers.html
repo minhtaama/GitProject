@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUM OF ALL NUMBERS</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        button {
+            margin-top: 10px;
+            border: 1px solid brown;
+            background-color: brown;
+            color: aliceblue;
+            border-radius: 1rem;
+            padding: 30px;
+            font-size: larger;
+        }
+        button:hover {
+            background-color: aquamarine;
+            border: 1px solid aquamarine;
+            color:black;
+        }
+        button:active {
+            background-color: rgb(27, 252, 177);
+            border: 1px solid rgb(27, 252, 177);
+        }
+        label {
+            font-size: 2rem;
+        }
+        input {
+            margin-top: 10px;
+            width: 150px;
+            text-align: center;
+            font-size: 2rem;
+            border: 3px solid;
+            border-radius: 1rem;
+            padding: 10px;
+        }
+        span {
+            color: red;
+        }
+        div {
+            margin: 0 auto 0 auto;
+            max-width: 700px;
+        }
+        p {
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        #title {
+            font-weight: 900;
+        }
+    </style>
+</head>
+<body>
+    <h1>TÍNH TỔNG CÁC CHỮ SỐ TRONG KHOẢNG</h1>
+    <label> Nhập số a:
+    <input type="number" id="a">
+    </label>
+    <label> Nhập số b:
+    <input type="number" id="b">
+    </label>
+    <br>
+    <button id="button">KẾT QUẢ</button>
+    <div>
+        <p id="result"></p>
+    </div>
+</body>
+</html>
+<script>
+    document.getElementById("button").addEventListener("click", () => {
+        let min, max;
+        let result = 0;
+        let a = parseInt(document.getElementById("a").value),
+            b = parseInt(document.getElementById("b").value);
+        if (a<b) {
+            min = a;
+            max = b;
+        } else if (a>b) {
+            min = b;
+            max = a;
+        }
+        for (let i = min; i<=max; i++){
+            result += i;
+        }
+        document.getElementById("result").innerHTML = "Tổng của các số nguyên <br> trong khoảng từ " + min + " đến " + max + " là " + result;
+    });
+</script>
