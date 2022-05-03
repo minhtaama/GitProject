@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw Triangle</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        button {
+            margin-top: 10px;
+            border: 1px solid brown;
+            background-color: brown;
+            color: aliceblue;
+            border-radius: 1rem;
+            padding: 30px;
+            font-size: larger;
+        }
+        button:hover {
+            background-color: aquamarine;
+            border: 1px solid aquamarine;
+            color:black;
+        }
+        button:active {
+            background-color: rgb(27, 252, 177);
+            border: 1px solid rgb(27, 252, 177);
+        }
+        div {
+            max-width: fit-content;
+            margin: 0 auto 0 auto;
+            font-weight: bolder;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>VẼ HÌNH TAM GIÁC</h1>
+    <br>
+    <button id="play">ẤN NÚT ĐỂ VẼ TAM GIÁC</button>
+    <div id = "container"></div>
+</body>
+</html>
+<script>
+    document.getElementById("play").addEventListener("click", () => {
+        for (let i = 1; i <= 4; i++) {
+            let p = document.createElement("p"),
+                newLine = document.getElementById("container").appendChild(p);
+                if (i%2!=0){
+                    for (let j = 1; j<=5; j++){
+                        for (let k = 1; k<=j; k++){
+                            newLine.innerText += "*";
+                        }
+                        newLine.innerHTML += "<br>"
+                    }
+                } else {
+                    for (let j = 5; j>=0; j--){
+                        for (let k = 1; k<=j; k++){
+                            newLine.innerText += "*";
+                        }
+                        newLine.innerHTML += "<br>"
+                    }
+                }
+                if (i<=2){
+                    newLine.style.textAlign = "left"
+                } else {
+                    newLine.style.textAlign = "right"
+                }
+        }
+    });
+</script>
