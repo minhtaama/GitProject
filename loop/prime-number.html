@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRIME NUMBERS</title>
+    <style>
+        :root {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        body {
+            text-align: center;
+        }
+        button {
+            margin-top: 10px;
+            border: 1px solid brown;
+            background-color: brown;
+            color: aliceblue;
+            border-radius: 1rem;
+            padding: 30px;
+            font-size: larger;
+        }
+        button:hover {
+            background-color: aquamarine;
+            border: 1px solid aquamarine;
+            color:black;
+        }
+        button:active {
+            background-color: rgb(27, 252, 177);
+            border: 1px solid rgb(27, 252, 177);
+        }
+        input {
+            margin-top: 10px;
+            width: 300px;
+            text-align: center;
+            font-size: 1.5rem;
+            border: 3px solid;
+            border-radius: 1rem;
+            padding: 10px;
+        }
+        span {
+            color: red;
+        }
+        table {
+            margin: 0 auto 0 auto;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+        th, td {
+            border: 2px solid black;
+            padding: 0.3rem;
+        }
+        #title {
+            font-weight: 900;
+            font-size: 1.5rem;
+        }
+        .prime {
+            color: red;
+            text-align: center;
+            width: 200px;
+            font-weight: bolder;
+        }
+    </style>
+</head>
+<body>
+    <h1>SỐ NGUYÊN TỐ</h1>
+    <input type="number" id="max" placeholder="Nhập một số vào đây">
+    <br>
+    <button id="play">Kết quả</button>
+    <div>
+        <p id="title"></p>
+        <table id="result"></table>
+    </div>
+</body>
+</html>
+<script>
+    document.getElementById("play").addEventListener("click", () => {
+        let max = document.getElementById("max").value;
+        let result = document.getElementById("result");
+        let agree = true;
+        if (max > 500) {
+            agree = confirm("NHIỀU SỐ THẾ NÀY LÀ LAG ĐẤY!!!!!!!!!!!!!");
+        }
+        if (agree){
+            document.getElementById("title").innerHTML = max + " SỐ NGUYÊN TỐ ĐẦU TIÊN:"
+            result.innerHTML = "";
+            let tr = result.appendChild(document.createElement("tr"));
+            tr.appendChild(document.createElement("th")).innerText = "Số thứ tự";
+            tr.appendChild(document.createElement("th")).innerText = "Số nguyên tố";
+            let count = 1,
+                number = 2;
+            while(count<=max){
+                let flag = 1;
+                for(let i = 2; i<=number/2; i++){
+                    if(number%i == 0){
+                        flag = 0;
+                        break;
+                    }
+                }
+                if(flag == 1) {
+                    let tr = result.appendChild(document.createElement("tr"));
+                    tr.appendChild(document.createElement("td")).innerText = count;
+                    let primeNum = tr.appendChild(document.createElement("td"));
+                    primeNum.innerText = number;
+                    primeNum.setAttribute("class","prime");
+                    count++;
+                }
+                number++;
+            }
+        }
+    });
+</script>
