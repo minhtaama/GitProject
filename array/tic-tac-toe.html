@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+</head>
+<style>
+    h1 {
+        font-size: 5rem;
+        margin: 0 0 1rem 0;
+    }
+    body {
+        text-align: center;
+    }
+    span {
+        font-size: 1.5rem;
+    }
+    #board {
+        font-size: 5rem;
+        margin: 0 0 2rem 0;
+    }
+    #board::first-line {
+        line-height: 0;
+    }
+    #alert {
+        font-size: 1.5rem;
+    }
+</style>
+<body>
+    <h1>TIC-TAC-TOE</h1>
+    <p id="board"></p>
+    <p id="turn"></p>
+    <input id="input" maxlength="2">
+    <button type="button" id="btn">ĐÁNH</button>
+    <p id="alert"></p>
+</body>
+<script>
+    //DECLARE VARIABLES
+    let player = "x";
+    let arrBoard = [],
+        xX = [],
+        xY = [],
+        oX = [],
+        oY = [];
+    let board = document.getElementById("board"),
+        turn = document.getElementById("turn");
+    
+    //CREATE AN 2D ARRAY SIZE 3x3
+    for (let i = 0; i < 3; i++){
+        arrBoard.push(["[&nbsp&nbsp]","[&nbsp&nbsp]","[&nbsp&nbsp]"]);
+    }
+
+    //INSERT ARRAY VALUE INTO HTML <p> id="board"
+    for (let i = 0; i<arrBoard.length; i++){
+        board.innerHTML += "<br>";
+        for (let j = 0; j<arrBoard[i].length; j++){
+            board.innerHTML += "<span>"+i+""+j+"</span>"+arrBoard[i][j];
+        }
+    }
+
+    //SHOW TURN OF WHICH PLAYER
+    turn.innerHTML = "Lượt của " + player;
+
+    //ACTION OF BUTTON
+    document.getElementById("btn").addEventListener("click",() =>{
+        let value = document.getElementById("input").value;
+        let alert = document.getElementById("alert");
+        if (!/[012][012]/.test(value)) {
+            alert.innerHTML = "WRONG INPUT";
+        } else if (arrBoard[parseInt(value[0])][parseInt(value[1])] == "[x]" || arrBoard[parseInt(value[0])][parseInt(value[1])] == "[o]") {
+            alert.innerHTML = "WRONG INPUT";
+        } else {
+            //IF INPUT IS CORRECT
+            alert.innerHTML = "";
+            //change turn of player & change value of single element in array
+            if(player == "x"){
+                arrBoard[parseInt(value[0])][parseInt(value[1])] = "[x]";
+                xX.push(parseInt(value[0]));
+                xY.push(parseInt(value[1]));
+                player = "o";                                               
+            } else if(player == "o"){                                       
+                arrBoard[parseInt(value[0])][parseInt(value[1])] = "[o]";
+                oX.push(parseInt(value[0]));
+                oY.push(parseInt(value[1]));    
+                player = "x";
+            }
+            //change visual of HTMLElement board according to the change of array value                                           
+            board.innerHTML = "";
+            for (let i = 0; i<arrBoard.length; i++){                             
+                board.innerHTML += "<br>";                                  
+                for (let j = 0; j<arrBoard[i].length; j++){                      
+                board.innerHTML += "<span>"+i+""+j+"</span>"+arrBoard[i][j];     
+                }                                                           
+            }
+            //SHOW TURN OF PLAYER
+            turn.innerHTML = "Lượt của " + player;
+            console.log("oX "+oX)
+            console.log("oY "+oY)
+            console.log("xX "+xX)
+            console.log("xY "+xY)
+            console.log("---")
+        }
+    })
+
+</script>
+</html>
