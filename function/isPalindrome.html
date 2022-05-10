@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>isPalindrome</title>
+</head>
+<body>
+    <h1>isPalindrome</h1>
+    <input id="word" type="text">
+    <button id="btn" type="button">CHECK</button>
+    <p id="result"></p>
+</body>
+<script>
+    function isPalindrome(i){
+        let word = document.getElementById("word").value;
+        let arr = word.split("");
+        if (i >= arr.length-1-i) {
+           return true;
+        } else if(arr[i]==arr[arr.length-1-i]) {
+           return isPalindrome(i+1);
+        } else return false;
+    }
+    document.getElementById("btn").addEventListener("click", () => {
+        
+        if(isPalindrome(0)){
+            document.getElementById("result").innerHTML = "Từ này là Palindrome";
+        } else {
+            document.getElementById("result").innerHTML = "Từ này không phải Palindrome";
+        }
+    })
+</script>
+</html>
