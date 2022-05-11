@@ -85,11 +85,9 @@
             if (checkWin(inputValue)) {
                 document.getElementById("title").innerHTML = currPlayer.toUpperCase() + " THẮNG!!!!"
                 document.getElementById("input").setAttribute("maxlength","0");
-                document.getElementById("btn-div").innerHTML = "";
             } else if (checkDraw()) {
                 document.getElementById("title").innerHTML = "KẾT QUẢ HÒA!<br>";
                 document.getElementById("input").setAttribute("maxlength","0");
-                document.getElementById("btn-div").innerHTML = "";
             } else {
             changeTurn();
             }
@@ -209,7 +207,6 @@
         document.getElementById("input").value = "";
         document.getElementById("title").innerHTML = "TIC-TAC-TOE";
         document.getElementById("input").setAttribute("maxlength","2");
-        document.getElementById("btn-div").innerHTML = "<button type='button' id='btn'>ĐÁNH</button><br>";
     }
 </script>
 </html>

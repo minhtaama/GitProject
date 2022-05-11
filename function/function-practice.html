@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Pratice</title>
+    <style>
+        .divPractice {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>FUNCTION PRACTICE</h1>
+    <hr>
+    <select name="choose-practice" id="choose">
+        <option value="0" selected disabled>Chọn Bài tập</option>
+        <option value="1">Bài 1</option>
+        <option value="2">Bài 2</option>
+        <option value="3">Bài 3</option>
+        <option value="4">Bài 4</option>
+        <option value="5">Bài 5</option>
+        <option value="6">Bài 6</option>
+        <option value="7">Bài 7</option>
+        <option value="8">Bài 8</option>
+        <option value="9">Bài 9</option>
+        <option value="10">Bài 10</option>
+    </select>
+    <hr>
+    <div id="1" class="divPractice">
+        <h2>Bài 1</h2>
+        <p>Tạo hàm nhận vào hai tham số. Nếu giá trị của tham số thứ nhất lớn hơn tham số thứ hai, hiển thị hộp thoại thông báo cho người dùng.<br>
+            Nếu giá trị của tham số thứ nhất nhỏ hơn hoặc bằng tham số thứ hai, trả về tổng của hai tham số.</p>
+        <input type="number" id="para1-1" placeholder="Tham số thứ nhất">
+        <input type="number" id="para1-2" placeholder="Tham số thứ hai">
+        <button type="button" id="btn-1">Kết quả</button>
+    </div>
+    <div id="2" class="divPractice">
+        <h2>Bài 2</h2>
+        <p>
+            Tạo một mảng với bảy phần tử dạng chuỗi có giá trị là tên các ngôi sao sau: Polaris, Aldebaran, Deneb, Vega, Altair, Dubhe và Regulus. Tạo một mảng khác với bảy phần tử dạng chuỗi có giá trị là tên các chòm sao tương ứng chứa các ngôi sao: Ursa Minor, Tarurus, Cygnus, Lyra, Aquila, Ursa Major và Leo. <br>
+            Tiếp theo, tạo một hàm nhận vào một tham số dạng chuỗi duy nhất. Trong hàm này, duyệt qua mảng thứ nhất để tìm tên ngôi sao. Nếu tìm thấy, trả lại giá trị tương ứng với chỉ số đó ở mảng thứ hai. Nói cách khác, trả lại tên chòm sao của ngôi sao đó. <br>
+            Trong phần &lt;body&gt; của trang web, dùng hộp thoại prompt để người dùng nhập vào tên của ngôi sao, sau đó gọi hàm với thông tin đầu vào. Đừng quên xử lý trong trường hợp không tìm thấy ngôi sao nào. Cho kết quả hiển thị trên màn hình. <br>
+        </p>
+        <button type="button" id="btn-2">Bài làm</button>
+    </div>
+    <div id="3" class="divPractice"></div>
+    <div id="4" class="divPractice"></div>
+    <div id="5" class="divPractice"></div>
+    <div id="6" class="divPractice"></div>
+    <div id="7" class="divPractice"></div>
+    <div id="8" class="divPractice"></div>
+    <div id="9" class="divPractice"></div>
+    <div id="10" class="divPractice"></div>
+</body>
+<script>
+    //SHOW AND HIDE LESSION:
+    document.getElementById("choose").addEventListener("change", () => {
+        let divPractice = document.getElementsByClassName("divPractice");
+        console.log(divPractice);
+        for(let i = 0; i<divPractice.length; i++) {
+            divPractice[i].style.display = "none";
+        }
+        let lessonValue = document.getElementById("choose").value;
+        document.getElementById(lessonValue).style.display = "block";
+    })
+
+    //BÀI 1:
+    {
+        function lesson1(a,b) {
+            if(parseInt(a)>parseInt(b)) {
+                return window.alert(`THÔNG BÁO: SỐ ${a} LỚN HƠN SỐ ${b}`);
+            } else return window.alert(`TỔNG HAI THAM SỐ LÀ ${parseInt(a)+parseInt(b)}`);
+        }
+        document.getElementById("btn-1").addEventListener("click", () => {
+            let arg1 = document.getElementById("para1-1").value;
+            let arg2 = document.getElementById("para1-2").value;
+            lesson1(arg1,arg2);
+        })
+    }
+
+    //BÀI 2:
+    {
+        let arr = ["Polaris","Aldebaran","Deneb","Vega","Altair","Dubhe","Regulus"];
+        let arr2 = ["Ursa Minor","Tarurus","Cygnus", "Lyra","Aquila","Ursa Major","Leo"];
+        function findStar(string) {
+            if (arr.indexOf(string)!=-1) {
+                return alert(arr2[arr.indexOf(string)]);
+            } else return alert("Không tìm thấy ngôi sao nào");
+        }
+        document.getElementById("btn-2").addEventListener("click", ()=> {
+            let value = prompt("Nhập tên ngôi sao:");
+            findStar(value);
+        })
+    }
+    
+    //BÀI 3:
+    {
+        
+    }
+</script>
+</html>

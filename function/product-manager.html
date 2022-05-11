@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Manager</title>
+    <style>
+        button {
+            padding: 0;
+            margin: auto 0 auto 0;
+        }
+        #div-all {
+            display: flex;
+            flex-direction: column;
+        }
+        .div-item {
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+</head>
+<body>
+    <h1>PRODUCT MANAGER</h1>
+    <div>
+        <h2>Add new Product</h2>
+        <div id="div-new">
+            <input id="addnew" type="text" placeholder="New Product">
+            <button id="btn-add">Add</button>
+        </div>
+        <hr>
+        <h2>Display All Products</h2>
+        <div id="div-all">
+            <div class="div-item">
+                <p class="item-name">Product Name</p>
+                <button class="btn-edit">Edit</button>
+                <button class="btn-del">Delete</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let products  = [],
+        list = document.getElementById("div-all")
+    
+    function addProduct() {
+        let value = document.getElementById("addnew").value;
+        products.push(value);
+        console.log(products);
+    }
+    function createItem() {
+        let newItem = list.appendChild(document.createElement("div")),
+            newP = newItem.appendChild(document.createElement("p")),
+            newEditBtn = newItem.appendChild(document.createElement("button")),
+            newDelBtn = newItem.appendChild(document.createElement("button"));
+        newItem.setAttribute("class","div-item");
+        newP.innerHTML = products[products.length - 1];
+        newP.setAttribute("class","item");
+        newEditBtn.innerHTML = "Edit";
+        newEditBtn.setAttribute("class","btn-edit");
+        newDelBtn.innerHTML = "Delete";
+        newDelBtn.setAttribute("class","btn-del");
+        addDelFunc();
+    }
+    function delProduct() {
+        let items = list.querySelectorAll(".div-item");
+        console.log(items);
+    }
+    function delItem() {
+
+    }
+    function addDelFunc() {
+        let delButtons = document.querySelectorAll(".btn-del");
+        delButtons.forEach((element) => {
+            element.addEventListener("click", () => {
+                delProduct();
+            })
+        })
+    }
+
+    document.getElementById("btn-add").addEventListener("click", () => {
+        addProduct();
+        createItem();
+    })
+</script>
+</html>
