@@ -45,10 +45,32 @@
         </p>
         <button type="button" id="btn-2">Bài làm</button>
     </div>
-    <div id="3" class="divPractice"></div>
-    <div id="4" class="divPractice"></div>
-    <div id="5" class="divPractice"></div>
-    <div id="6" class="divPractice"></div>
+    <div id="3" class="divPractice">
+        <h2>Bài 3</h2>
+        <p>Viết hàm tính bình phương của một số bất kỳ được đưa vào. Gọi hàm vừa xây dựng được.</p>
+        <button type="button" id="btn-3">Bài làm</button>
+    </div>
+    <div id="4" class="divPractice">
+        <h2>Bài 4</h2>
+        <p>Viết hàm tính diện tích, hàm tính chu vi hình tròn. Gọi hàm vừa xây dựng được</p>
+        <input type="number" id="input-4" placeholder="Nhập bán kính hình tròn">
+        <button type="button" id="btn-4-1">Diện tích</button>
+        <button type="button" id="btn-4-2">Chu vi</button><br>
+        <p id="result-4"></p>
+    </div>
+    <div id="5" class="divPractice">
+        <h2>Bài 5</h2>
+        <p>Viết hàm tính giai thừa của một số nguyên bất kỳ được đưa vào. Gọi hàm vừa xây dựng được.</p>
+        <input type="number" id="input-5" placeholder="Nhập một số nguyên">
+        <button type="button" id="btn-5">Tính giai thừa</button><br>
+        <p id="result-5"></p>
+    </div>
+    <div id="6" class="divPractice">
+        <h2>Bài 6</h2>
+        <p>Viết hàm kiểm tra xem ký tự nhập vào có phải là ký tự số không. Nếu là ký tự số hàm trả về true, ngược lại trả về false.</p>
+        <input type="text" id="input-6" placeholder="Nhập ký tự">
+        <button type="button" id="btn-6">Kiểm tra</button><br>
+    </div>
     <div id="7" class="divPractice"></div>
     <div id="8" class="divPractice"></div>
     <div id="9" class="divPractice"></div>
@@ -97,7 +119,54 @@
     
     //BÀI 3:
     {
-        
+        function sqrt(val) {
+            return val*val;
+        }
+        document.getElementById("btn-3").addEventListener("click", () => {
+            let x = prompt("Nhập số X:");
+            alert("X bình phương bằng: " + sqrt(x));
+        })
+    }
+    
+    //BÀI 4:
+    {
+        function acreage(r) {
+            return r*r*Math.PI;
+        }
+        function perimeter(r) {
+            return 2*r*Math.PI
+        }
+        document.getElementById("btn-4-1").addEventListener("click", () => {
+            let val = parseInt(document.getElementById("input-4").value);
+            document.getElementById("result-4").innerHTML = "Diện tích: " + acreage(val);
+        })
+        document.getElementById("btn-4-2").addEventListener("click", () => {
+            let val = parseInt(document.getElementById("input-4").value);
+            document.getElementById("result-4").innerHTML = "Chu vi: " + perimeter(val);
+        })
+    }
+
+    //BÀI 5:
+    {   
+        function factorial(n) {
+            let result = 1;
+            for (let i = 2; i<=n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+        document.getElementById("btn-5").addEventListener("click", () => {
+            let val = parseInt(document.getElementById("input-5").value);
+            document.getElementById("result-5").innerHTML = "Kết quả: " + factorial(val);
+        })
+    }
+
+    //BÀI 6:
+    {   
+        document.getElementById("btn-6").addEventListener("click", () => {
+            let val = document.getElementById("input-6").value;
+            console.log(typeof val);
+        })
     }
 </script>
 </html>
