@@ -13,6 +13,9 @@
         h1, h3, #div-new {
             text-align: center;
         }
+        h1 {
+            font-size: 8vw
+        }
         button {
             /* padding: 0.7rem 1rem 0.7rem 1rem; */
             margin: auto 0.4rem auto 0;
@@ -42,20 +45,19 @@
         }
         input {
             height: 2rem;
-            width: 66vw;
             max-width: 495px;
             border-radius: 0.5rem;
             margin-right: 0.4rem;
             padding: 0.2rem;
             padding-left: 1rem;
         }
-        input.item-name {
-            width: 55vw;
+        #addnew {
+            width: 66vw;
         }
         #div-all {
             display: flex;
             flex-direction: column;
-            max-width: 600px;
+            max-width: 50rem;
             margin: 0 auto 0 auto;
         }
         .div-item {
@@ -74,12 +76,14 @@
 </head>
 <body>
     <h1>PRODUCT MANAGER</h1>
+    <hr>
     <div>
         <h3>Add new Product</h3>
         <div id="div-new">
             <input id="addnew" type="text" placeholder="Insert new product name here">
             <button id="btn-add">Add</button>
         </div>
+        <br>
         <hr>
         <h3>Display All Products</h3>
         <div id="div-all">
@@ -150,11 +154,14 @@
         editBtns.forEach((el,index) => {
             el.addEventListener("click", () => {
                 let list = document.getElementById("div-all").children;
+                list[index].children[1].remove()
+                list[index].children[1].remove()
                 let oldChild = list[index].children[0];
                 let newChild = document.createElement("input");
                 newChild.value = products[index];
                 newChild.setAttribute("placeholder","Input new name")
                 newChild.setAttribute("class","item-name")
+                newChild.style.width = "100%";
                 newChild.addEventListener("blur", () => {
                     if(newChild.value != ""){
                         products[index] = newChild.value
