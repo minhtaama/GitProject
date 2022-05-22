@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Temperature</title>
+</head>
+<style></style>
+<body>
+<input type="number" id="input" placeholder="Input Temperature">
+<button type="button" id="btn">Get F and K</button>
+<p id="result"></p>
+</body>
+<script>
+    class Temperature {
+        constructor() {
+        }
+        setCelcius(a){
+            this.celcius = parseFloat(a);
+        }
+        getFahrenheit(){
+            return (9/5)*this.celcius+32;
+        }
+        getKelvin(){
+            if(this.celcius > -273.15) {
+                return this.celcius+273.15;
+            } else return "Wrong Input"
+        }
+    }
+    let temp = new Temperature();
+    document.getElementById("btn").addEventListener("click",()=>{
+        temp.setCelcius(document.getElementById("input").value);
+        document.getElementById("result").innerHTML = "Fahrenheit: " + temp.getFahrenheit() + "<br>Kelvin: " + temp.getKelvin();
+    })
+</script>
+</html>
