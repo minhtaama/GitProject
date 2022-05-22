@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build a Rectangle</title>
+    <style>
+        canvas {
+            border: 1px solid red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>BUILD A RECTANGLE</h1>
+    <input type="number" id="a" placeholder="Nhập độ dài một cạnh">
+    <input type="number" id="b" placeholder="Nhập độ dài cạnh còn lại">
+    <button type="button" id="btn">VẼ HÌNH CHỮ NHẬT</button>
+    <p id="result"></p>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <p>Canvas size: 500x500 pixel</p>
+</body>
+<script>
+    class Rect {
+        constructor() {
+            this.aLength = 0;
+            this.bLength = 0;
+        }
+        getA() {
+            return this.aLength;
+        }
+        getB() {
+            return this.bLength;
+        }
+        setLength(a,b) {
+            this.aLength = parseInt(a);
+            this.bLength = parseInt(b);
+        }
+        getPerimeter() {
+            return (this.aLength + this.bLength)*2;
+        }
+        getArea() {
+            return this.aLength*this.bLength;
+        }
+    }
+
+    let rect = new Rect();
+    let canvas = document.getElementById("canvas");
+    let ctx = canvas.getContext("2d");
+    let result = document.getElementById("result");
+
+    function drawRect(a,b){
+        ctx.lineWidth = 2;
+        ctx.strokeRect(0,0,a,b);
+        ctx.strokeStyle = "black";
+    }
+    function clrRect(){
+        ctx.clearRect(0,0,5000,5000);
+    }
+
+    document.getElementById("btn").addEventListener("click", () => {
+        clrRect();    
+        let a = document.getElementById("a").value;
+        let b = document.getElementById("b").value;
+        rect.setLength(a,b);
+        drawRect(rect.getA(),rect.getB());
+        result.innerHTML = "Chu vi của hình chữ nhật: " + rect.getPerimeter() + " pixel. <br>Diện tích của hình chữ nhật: " + rect.getArea() + " pixel";
+    })
+</script>
+</html>
