@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Adam and Eva eat apple</title>
+</head>
+<body>
+<p id="status"></p>
+<button type="button" id="btn-adam-eat">Adam eats</button>
+<button type="button" id="btn-eva-eat">Eva eats</button>
+</body>
+<script>
+    class Apple {
+        constructor() {
+            this.weight = 10;
+        }
+        decrease() {
+            if(this.weight > 0) {
+                this.weight--;
+            }
+        }
+        isEmpty() {
+            if (this.weight == 0) {
+                return true;
+            } else return false;
+        }
+        getWeight() {
+            return this.weight;
+        }
+    }
+    
+    class Human {
+        constructor(name, gender, weight){
+            this.name = name;
+            this.gender = gender;
+            this.weight = weight;
+        }
+        isMale() {
+            return this.gender;
+        }
+        setGender(boolean) {
+            this.gender = boolean;
+        }
+        checkApple(apple) {
+            return apple.getWeight();
+        }
+        eat(apple){
+            apple.decrease();
+        }
+        say(string) {
+            alert(string);
+        }
+        getName() {
+            return this.name;
+        }
+        setName(name) {
+            this.name = name;
+        }
+        getWeight() {
+            return this.weight;
+        }
+        setWeight(weight) {
+            this.weight = weight;
+        }
+    }
+    
+    let apple = new Apple(),
+        adam = new Human("Adam",true,50),
+        eva = new Human("Eva",false,30);
+    let result = document.getElementById("status");
+    
+    result.innerHTML = `Apple weight: ${apple.getWeight()}<br> Adam weight: ${adam.getWeight()}<br> Eva weight: ${eva.getWeight()}`;
+    
+    document.getElementById("btn-adam-eat").addEventListener("click", () => {
+        if (!apple.isEmpty()) {
+            adam.eat(apple);
+            adam.setWeight(adam.getWeight() + 1);
+        }
+        result.innerHTML = `Apple weight: ${apple.getWeight()}<br> Adam weight: ${adam.getWeight()}<br> Eva weight: ${eva.getWeight()}`;
+    })
+    document.getElementById("btn-eva-eat").addEventListener("click", () => {
+        if (!apple.isEmpty()) {
+            eva.eat(apple);
+            eva.setWeight(eva.getWeight() + 1);
+        }
+        result.innerHTML = `Apple weight: ${apple.getWeight()}<br> Adam weight: ${adam.getWeight()}<br> Eva weight: ${eva.getWeight()}`;
+    })
+</script>
+</html>
