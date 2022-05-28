@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pikachu Moving Around</title>
+    <style>
+        /* img {
+            border: 1px solid black;
+        } */
+    </style>
+</head>
+<body>
+    <div id="characters"></div>
+</body>
+<script>
+    class Character {
+        changeLeft = 1;
+        changeTop = 1;
+        constructor(image, top, left, size) {   
+            this.image = image;
+            this.top = top;
+            this.left = left;
+            this.size = size;
+            this.speed;
+        }
+        getCharacterElement() {
+            return `<img width="${this.size}" height="${this.size}" 
+                    src=${this.image} style="top: ${this.top}px; left: ${this.left}px; position: absolute">`
+        }
+        checkFlag() {
+            if(this.left + this.size >= window.innerWidth) {
+                this.changeLeft = 0;
+            }
+            if(this.left <= 0) {
+                this.changeLeft = 1;
+            }
+            if(this.top + this.size >= window.innerHeight) {
+                this.changeTop = 0;
+            }
+            if(this.top <= 0) {
+                this.changeTop = 1;
+            }
+        }
+        moveTop(){
+            this.top -= this.speed;
+        }
+        moveRight(){
+            this.left += this.speed;
+        }
+        moveBottom(){
+            this.top += this.speed;
+        }
+        moveLeft(){
+            this.left -= this.speed;
+        }
+        moveCharacter(){
+            setInterval(()=> {
+                this.checkFlag();
+                if(this.changeLeft == 1) {
+                    this.moveRight();
+                }
+                if(this.changeLeft == 0) {
+                    this.moveLeft();
+                }
+                if(this.changeTop == 1) {
+                    this.moveBottom();
+                }
+                if(this.changeTop == 0) {
+                    this.moveTop();
+                }
+                document.getElementById("characters").innerHTML = this.getCharacterElement();
+        
+            },20);
+        }
+    }
+
+    let pikachu = new Character("pikachu.png",20,-20,200);
+    pikachu.moveCharacter();
+    pikachu.speed = 2;
+</script>
+</html>
