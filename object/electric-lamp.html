@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electric Lamp</title>
+</head>
+<body>
+    <h1>ELECTRIC LAMP</h1>
+    <p>Electric lamp status: <span id="status"></span></p>
+    <button id="switch" onclick="turnOnOff()"></button>
+</body>
+<script>
+    class ElectricLamp {
+        constructor(){
+            this.status = false;
+        }
+        turnOff() {
+            this.status = false;
+        }
+        turnOn() {
+            this.status = true;
+        }
+    }
+    class SwitchButton {
+        constructor () {
+            this.status = false;
+            this.lamp;
+        }
+        connectToLamp(electricLamp) {
+            this.lamp = electricLamp;
+        }
+        switchOff() {
+            this.lamp.turnOff();
+            this.status = false;
+        }
+        switchOn() {
+            this.lamp.turnOn();
+            this.status = true;
+        }
+    }
+
+    let lamp = new ElectricLamp();
+    let switchButton = new SwitchButton();
+    switchButton.connectToLamp(lamp);
+
+    function render() {
+        if(lamp.status == true){
+            document.getElementById("status").innerHTML = "ON"
+        } else {
+            document.getElementById("status").innerHTML = "OFF"
+        }
+        if (switchButton.status == false){
+            document.getElementById("switch").innerHTML = "TURN ON"
+        } else {
+            document.getElementById("switch").innerHTML = "TURN OFF"
+        }
+    }
+    
+    function turnOnOff() {
+        if(lamp.status == true) {
+            switchButton.switchOff();
+            console.log("lamp.status:", lamp.status)
+            console.log("switch.status:", switchButton.status)
+        }
+        else {
+            switchButton.switchOn();
+            console.log("lamp.status:", lamp.status)
+            console.log("switch.status:", switchButton.status)
+        }
+        render();
+    }
+
+    render();
+</script>
+</html>
