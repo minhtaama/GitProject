@@ -221,6 +221,7 @@ class Display {
         } else return `Lượt chơi của ${this.player2}<br> ${PLAYER_O_BIGGER}`
     }
     renderMainMenu() {
+        this.mainMenu.removeAttribute("class");
         this.mainMenu.innerHTML =   
                `${PLAYER_X_BIGGER}<input type="text" id="player1" placeholder="Nhập tên"><br>
                 ${PLAYER_O_BIGGER}<input type="text" id="player2" placeholder="Nhập tên"><br>
@@ -231,15 +232,19 @@ class Display {
     }
     renderInGameDisplay() {
         this.setPlayerScore();
+        this.mainMenu.setAttribute("class","sticky");
         this.mainMenu.innerHTML =  
                `<div style="display: flex; flex-direction: row; justify-content: space-evenly; flex-wrap: wrap; align-items: center; margin-left: auto; margin-right: auto; max-width: ${CELL_WIDTH*this.game.cols-100}px">
-                <p id="point">${PLAYER_X_BIGGER} : ${this.player1Score}<br>${PLAYER_O_BIGGER} : ${this.player2Score}</p>
+                <div>
+                <button id="btn-restart" onclick="restartRound()" style="">CHƠI LẠI</button><br>
+                <button id="btn-mainMenu" onclick="mainMenu()" style="">TRỞ VỀ MÀN HÌNH CHÍNH</button>
+                </div>
+                <p id="point">${PLAYER_X} : ${this.player1Score}<br>${PLAYER_O} : ${this.player2Score}</p>
                 <p id="curr-player"></p>
                 </div>`;
         this.bottomGameBoard.setAttribute("style","position: relative");
         this.bottomGameBoard.innerHTML =   
-              `<button id="btn-restart" onclick="restartRound()" style="">CHƠI LẠI</button>
-               <button id="btn-mainMenu" onclick="mainMenu()" style="">TRỞ VỀ MÀN HÌNH CHÍNH</button>`;
+              `Cờ ca-rô hehehe`;
         document.getElementById("curr-player").innerHTML = this.renderPlayerName();
     }
     setPlayerScore(){

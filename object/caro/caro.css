@@ -8,16 +8,27 @@ body {
 h1 {
     font-size: 4rem;;
 }
+div.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    padding: 5px;
+    background-color: rgb(249, 249, 181);
+    z-index: 100;
+}
 #point {
     font-size: 30px;
     font-weight:bolder;
     max-width: max-content;
-    padding: 1rem;
-    border: 5px solid rgb(36, 36, 150);
 }
 #curr-player {
     font-weight:bolder;
-    font-size: 28px;
+    font-size: 20px;
+}
+@media (max-width: 500px) {
+    #point, #curr-player {
+        font-size: 15px;
+    }
 }
 #game-board {
     max-width: 1000px;
@@ -32,10 +43,9 @@ h1 {
     background-color: aliceblue;
     color: white;
 }
-input,button {
-    margin: 20px;
-}
+
 input {
+    margin: 20px;
     font-family: inherit;
     padding: 1rem;
     border-radius: 1rem;
@@ -47,5 +57,4 @@ button {
     border-radius: 1rem;
     background-color: rgb(36, 36, 150);
     color: aliceblue;
-    padding: 20px;
 }
