@@ -3,18 +3,22 @@ body {
     background-color: rgb(249, 249, 181);
     text-align: center;
     font-family: 'Patrick Hand', cursive;
-    color:rgb(36, 36, 150)
+    color:rgb(36, 36, 150);
+    font-size: larger;
 }
 h1 {
     font-size: 4rem;;
 }
-div.sticky {
-    position: -webkit-sticky;
-    position: sticky;
+div.fixed {
+    position: fixed;
     top: 0;
+    left: 50%;
     padding: 5px;
     background-color: rgb(249, 249, 181);
     z-index: 100;
+    width: 600px;
+    margin-left: -300px;
+    border: 5px solid rgb(36, 36, 150);
 }
 #point {
     font-size: 30px;
@@ -25,12 +29,8 @@ div.sticky {
     font-weight:bolder;
     font-size: 20px;
 }
-@media (max-width: 500px) {
-    #point, #curr-player {
-        font-size: 15px;
-    }
-}
 #game-board {
+    top: 200px;
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
@@ -47,14 +47,29 @@ div.sticky {
 input {
     margin: 20px;
     font-family: inherit;
+    font-size: inherit;
     padding: 1rem;
     border-radius: 1rem;
     border: 3px solid rgb(36, 36, 150);
 }
 button {
+    margin: 0.1rem;
+    padding: 0.6rem;
     font-family: inherit;
+    font-size: inherit;
     border: 0;
     border-radius: 1rem;
     background-color: rgb(36, 36, 150);
     color: aliceblue;
+}
+@media (max-width: 500px) {
+    #point, #curr-player {
+        font-size: 15px;
+    }
+    button {
+        margin: 0.1rem;
+        padding: 0.3rem;
+        font-size: inherit;
+        border-radius: 0.5rem;
+    }
 }
