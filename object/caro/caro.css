@@ -16,22 +16,28 @@ div.fixed {
     padding: 5px;
     background-color: rgb(249, 249, 181);
     z-index: 100;
-    width: 600px;
-    margin-left: -300px;
+    width: 60%;
+    margin-left: -31%;
     border: 5px solid rgb(36, 36, 150);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center; 
 }
 #point {
-    font-size: 30px;
+    font-size: 20px;
     font-weight:bolder;
-    max-width: max-content;
+    margin: 0 20px 0 20px;
+    width: 70px
 }
 #curr-player {
     font-weight:bolder;
     font-size: 20px;
 }
 #game-board {
-    top: 200px;
-    max-width: 1000px;
+    top: 20vh;
+    width: 50%;
     margin-left: auto;
     margin-right: auto;
     padding: 2px;
@@ -62,8 +68,13 @@ button {
     background-color: rgb(36, 36, 150);
     color: aliceblue;
 }
-@media (max-width: 500px) {
-    #point, #curr-player {
+@media (max-width: 700px) {
+    div.fixed {
+        width: 100%;
+        left:0;
+        margin-left: 0;
+    }
+    #curr-player {
         font-size: 15px;
     }
     button {

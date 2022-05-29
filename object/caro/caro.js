@@ -237,14 +237,12 @@ class Display {
         this.setPlayerScore();
         this.mainMenu.setAttribute("class","fixed");
         this.mainMenu.innerHTML =  
-               `<div style="display: flex; flex-direction: row; justify-content: space-evenly; flex-wrap: wrap; align-items: center; margin-left: auto; margin-right: auto; max-width: ${CELL_WIDTH*this.game.cols-100}px">
-                <div>
+               `<div>
                 <button id="btn-restart" onclick="restartRound()" style="">CHƠI LẠI</button><br>
                 <button id="btn-mainMenu" onclick="mainMenu()" style="">END</button>
                 </div>
                 <p id="point">${PLAYER_X} : ${this.player1Score}<br>${PLAYER_O} : ${this.player2Score}</p>
-                <p id="curr-player"></p>
-                </div>`;
+                <p id="curr-player"></p>`;
         document.getElementById("curr-player").innerHTML = this.renderPlayerName();
     }
     setPlayerScore(){
@@ -284,5 +282,7 @@ function restartRound() {
 }
 
 function mainMenu(){
-    display.renderMainMenu();
+    if(confirm("Bạn có muốn kết thúc trận đấu?")){
+        display.renderMainMenu();
+    }
 }
