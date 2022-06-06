@@ -9,12 +9,12 @@
 }
 #canvas {
     border: 1px solid black;
-    width: 97vw;
+    width: 70vmin;
 }
 #game {
     text-align: center;
 }
 button {
-    width: 40vw;
-    height: 100px;
+    width: 100px;
+    height: 50px;
 }

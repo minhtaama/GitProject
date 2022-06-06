@@ -8,86 +8,173 @@ class Ball {
         this.y;
         this.xFlag = 0; //0: move left, 1: move right
         this.yFlag = 0; //0: move up, 1: move down
+        this.spHorizon = Math.sqrt(2);
+        this.spVertical = Math.sqrt(2);
         this.touchBorderBottom = 0;
-        this.speedVertical = Math.sqrt(12.5);
-        this.speedHorizontal = Math.sqrt(12.5);
+        this.xT;        //coordinates of nearest touch point on target
+        this.yT;        //
     }
     getCoordinates(x,y) {
         this.x = x;
         this.y = y;
     }
-    display() {
-        ctx.beginPath();
-        ctx.arc(this.x,this.y,this.radius,0,2*Math.PI);
-        ctx.fillStyle = "blue";
-        ctx.fill()
+    getSpeed() {
+        this.speed = Math.sqrt(this.spVertical**2 + this.spHorizon**2);
     }
-    ifTouchBorder() {
-        if(this.x - this.radius <= 0) { //if touch left
+    isTouch(target) {
+        let range;      //range from ball to touch point
+        if(this.x <= target.x) {
+            this.xT = target.x;
+        } else if (this.x >= target.x + target.width) {
+            this.xT = target.x + target.width;
+        } else if (this.x > target.x && this.x < target.x + target.width) {
+            this.xT = this.x;
+        }
+        if(this.y <= target.y) {
+            this.yT = target.y;
+        } else if(this.y >= target.y + target.height) {
+            this.yT = target.y + target.height;
+        } else if (this.y > target.y  && this.y < target.y + target.height) {
+            this.yT = this.y;
+        }
+        ///drawRange///
+            ctx.beginPath();
+            ctx.arc(this.xT,this.yT,2,0,2*Math.PI);
+            ctx.fillStyle = "blue";
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(this.x,this.y);
+            ctx.lineTo(this.xT,this.yT);
+            ctx.strokeStyle = "gray";
+            ctx.stroke();
+        //////////////
+        range = Math.sqrt((this.x - this.xT)**2 + (this.y - this.yT)**2) - this.radius;
+        if (range <= 0) {
+            //offset ball(x,y) to not go inside target if target is moving
+            if (this.x <= target.x) {
+                this.x -= target.spHorizon; 
+            } 
+            else if (this.x >= target.x + target.width) {
+                this.x += target.spHorizon;
+            }
+            if (this.y <= target.y) {
+                this.y -= target.spVertical; 
+            }
+            else if (this.y >= target.y + target.width) {
+                this.y += target.spVertical;
+            }
+            console.log("touched")
+            return true;
+        } else return false;
+    }
+    modDirection(target) {
+        this.getSpeed();        //this.speed always a CONST
+        if(target.goLeft) {
+            switch(this.xFlag) {
+                case 0:
+                    this.spHorizon += (this.speed - this.spHorizon)/3;
+                    break;
+                case 1:
+                    this.spHorizon -= this.spHorizon/3;
+                    break;
+            }
+            this.spVertical = Math.sqrt(this.speed**2 - this.spHorizon**2);
+            console.log("ball speed:",this.speed," /ball => vector:", this.spHorizon, "/ ball ^ vector:", this.spVertical);
+        }
+        if(target.goRight) {
+            switch(this.xFlag) {
+                case 0:
+                    this.spHorizon -= this.spHorizon/3;
+                    break;
+                case 1:
+                    this.spHorizon += (this.speed - this.spHorizon)/3;
+                    break;
+            }
+            this.spVertical = Math.sqrt(this.speed**2 - this.spHorizon**2);
+            console.log("ball speed:",this.speed," /ball => vector:", this.spHorizon, "/ ball ^ vector:", this.spVertical);
+        }
+    }
+    whenTouch(target) {
+        if(this.isTouch(target)) {
+            //switch move up/down and move left/right
+            switch(this.xT) {
+                case target.x:
+                    this.xFlag = 0;
+                    break;
+                case target.x + target.width:
+                    this.xFlag = 1;
+            }
+            switch(this.yT) {
+                case target.y:
+                    this.yFlag = 0;
+                    break;
+                case target.y + target.height:
+                    this.yFlag = 1;
+            }
+            this.modDirection(target);
+        }
+    }
+    whenTouchBorder() {
+        if(this.x - this.radius <= 0) {                 //if touch left
             this.xFlag = 1;
         }
-        if(this.x + this.radius >= canvas.width-1) { //if touch right
+        if(this.x + this.radius >= canvas.width-1) {    //if touch right
             this.xFlag = 0;
         }
-        if(this.y - this.radius <= 0) { //if touch top
+        if(this.y - this.radius <= 0) {                 //if touch top
             this.yFlag = 1;
         }
-        if(this.y + this.radius >= canvas.height) { //if touch bottom
+        if(this.y + this.radius >= canvas.height) {     //if touch bottom
             this.touchBorderBottom = 1;
             this.yFlag = 0;
         }
     }
     move(){
-        this.ifTouchBorder();
-        if (this.speedVertical >= 0) {
-            if(this.xFlag == 1) {
-                this.x += this.speedVertical; //move right
-            }
-        } else this.x -= this.speedVertical;
-        if(this.speedVertical >= 0) {
-        if(this.xFlag == 0) {
-            this.x -= this.speedVertical; //move left
+        if(this.xFlag == 1) {
+            this.x += this.spHorizon;                   //move right
         }
-        } else this.x += this.speedVertical;
+        if(this.xFlag == 0) {
+            this.x -= this.spHorizon;                   //move left
+        }
         if(this.yFlag == 1) {
-            this.y += this.speedHorizontal; //move bottom
+            this.y += this.spVertical;                  //move bottom
         }
         if(this.yFlag == 0) {
-            this.y -= this.speedHorizontal; //move top
+            this.y -= this.spVertical;                  //move top
         }
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.radius,0,2*Math.PI);
+        ctx.fillStyle = "blue";
+        ctx.fill()
     }
 }
 
 class Pad {
-    constructor (width, height) {
+    constructor (width) {
         this.width = width;
-        this.height = height;
+        this.height = 10;
         this.x;
-        this.y = 450;
+        this.y = canvas.height - 40;
+        this.spVertical = 0;
+        this.spHorizon = 5;
         this.goLeft = false;
         this.goRight = false;
-        this.speed = 5;
+        // this.goUp = false;
+        // this.goDown = false;
     }
     getCoordinates(x) {
         this.x = x;
     }
-    getCenterCoordinates() {
-        this.xCen = this.x + this.width/2;
-        this.yCen = this.y + this.height/2;
-    }
-    display() {
+    move(){
+        if(this.goLeft && this.x > 0) {
+            this.x -= this.spHorizon;
+        }
+        if(this.goRight && (this.x + this.width) < canvas.width) {
+            this.x += this.spHorizon;
+        }
         ctx.beginPath();
         ctx.fillStyle = "red";
         ctx.fillRect(this.x,this.y,this.width,this.height);
-    }
-    move(){
-        if(this.goLeft && this.x > 0) {
-            this.x -= this.speed;
-        }
-        if(this.goRight && (this.x + this.width) < canvas.width) {
-            this.x += this.speed;
-        }
-        this.getCenterCoordinates();
     }
 }
 
@@ -97,15 +184,13 @@ class Target{
         this.y = y;
         this.width = width;
         this.height = height;
+        this.spHorizon = 0;
+        this.spVertical = 0;
     }
     display() {
         ctx.beginPath();
         ctx.fillStyle = "green";
         ctx.fillRect(this.x,this.y,this.width,this.height);
-    }
-    getCenterCoordinates() {
-        this.xCen = this.x + this.width / 2;
-        this.yCen = this.y + this.height / 2;
     }
 }
 
@@ -123,87 +208,33 @@ class Targets {
 
 
 class BouncingBall {
-    constructor (ballRadius,padWidth,padHeight) {
+    constructor (ballRadius,padWidth) {
         this.ball = new Ball(ballRadius);
-        this.pad = new Pad(padWidth,padHeight);
+        this.pad = new Pad(padWidth);
+        this.target = new Target(50,30,10,100)
     }
     display() {
         ctx.clearRect(0,0,canvas.width,canvas.height);
-        this.isBallTouch(this.pad);
+        this.ball.whenTouch(this.pad);
+        this.ball.whenTouch(this.target);
+        this.ball.whenTouchBorder();
+        this.target.display();
         this.pad.move();
         this.ball.move();
-        //this.changeBallSpeed()
-        this.pad.display();
-        this.ball.display();
-        console.log(this.ballActualSpeed,this.ball.speedVertical, this.ball.speedHorizontal);
-    }
-    getBallSpeed() {
-        this.ballActualSpeed = Math.sqrt(this.ball.speedHorizontal**2 + this.ball.speedVertical**2);
-    }
-    changeBallSpeed(){
-        if (this.isBallTouch(this.pad)) {
-            if (this.pad.goRight) {
-                this.getBallSpeed();
-                if(this.ball.speedVertical + 0.5 < this.ballActualSpeed) {
-                    this.ball.speedVertical += 0.5;
-                } else this.ball.speedVertival += this.ballActualSpeed - this.ball.speedVertical - 0.1;
-            } else if (this.pad.goLeft) {
-                this.getBallSpeed();
-                if(this.ball.speedVertical - 0.5 > -this.ballActualSpeed) {
-                    this.ball.speedVertical -= 0.5;
-                } else this.ball.speedVertival -= this.ballActualSpeed - this.ball.speedVertical - 0.1;
-            }
-            this.ball.speedHorizontal = Math.sqrt(this.ballActualSpeed**2 - this.ball.speedVertical**2)
-        }
-    }
-    isBallTouch(target) {
-        if (target.yCen - this.ball.y > 0) {
-            //touch top side
-            if (target.yCen - this.ball.y <= this.ball.radius + target.height / 2) {
-                if (this.ball.x <= target.width + target.x && this.ball.x >= target.x) {
-                    this.ball.yFlag = 0;
-                    return true;
-                }
-            } else return false;
-        } else {
-            //touch bottom side
-            if (this.ball.y - target.yCen <= this.ball.radius + target.height / 2) {
-                if (this.ball.x <= target.width + target.x && this.ball.x >= target.x) {
-                    this.ball.yFlag = 1;
-                    return true;
-                }
-            } else return false;
-        }
-        if (target.xCen - this.ball.x > 0) {
-            //touch left side
-            if (target.xCen - this.ball.x <= this.ball.radius + target.width / 2) {
-                if (this.ball.y <= target.height + target.y && this.ball.y >= target.y) {
-                    this.ball.xFlag = 0;
-                    return true;
-                }
-            } else return false;
-        } else {
-            //touch right side
-            if (this.ball.x - target.xCen <= this.ball.radius + target.width / 2) {
-                if (this.ball.y <= target.height + target.y && this.ball.y >= target.y) {
-                    this.ball.xFlag = 1;
-                    return true;
-                }
-            } else return false;
-        }
     }
 }
 
-let game = new BouncingBall(6,100,50);
+let game = new BouncingBall(6,100,20);
 game.pad.getCoordinates(canvas.width/2-game.pad.width/2);
 game.ball.getCoordinates(canvas.width/2,180-game.pad.height);
-game.getBallSpeed();
+game.ball.getSpeed();
 
 function animate(){
     game.display();
     requestAnimationFrame(animate);
 }
 animate();
+console.log(game.ball.spHorizon,game.ball.spVertical)
 
 document.addEventListener("keydown",(e)=>{
     if(e.key == "ArrowLeft") {
