@@ -68,21 +68,6 @@ class Bal {
         } else return false;
     }
     modDirection(target) {
-        //switch move up/down and move left/right
-        switch (this.xT) {
-            case target.x:
-                this.xFlag = 0;
-                break;
-            case target.x + target.width:
-                this.xFlag = 1;
-        }
-        switch (this.yT) {
-            case target.y:
-                this.yFlag = 0;
-                break;
-            case target.y + target.height:
-                this.yFlag = 1;
-        }
         this.getSpeed(); //this.speed always a CONST
         if(target.goLeft) {
             switch(this.xFlag) {
@@ -96,8 +81,7 @@ class Bal {
             }
             this.spVertical = Math.sqrt(this.speed**2 - this.spHorizon**2);
             console.log("ball speed:",this.speed," /ball => vector:", this.spHorizon, "/ ball ^ vector:", this.spVertical);
-        }
-        if(target.goRight) {
+        } else if(target.goRight) {
             switch(this.xFlag) {
                 case 0:
                     this.xFlag = 1;
@@ -109,10 +93,28 @@ class Bal {
             }
             this.spVertical = Math.sqrt(this.speed**2 - this.spHorizon**2);
             console.log("ball speed:",this.speed," /ball => vector:", this.spHorizon, "/ ball ^ vector:", this.spVertical);
+        } else {
+            if(Math.floor(Math.random()*2)==0) {
+                this.spHorizon -= Math.sqrt(this.spHorizon**2/100);
+                this.spVertical = Math.sqrt(this.speed**2 - this.spHorizon**2);
+            } else {
+                this.spVertical -= Math.sqrt(this.spVertical**2/100);
+                this.spHorizon = Math.sqrt(this.speed**2 - this.spVertical**2);
+            }
+        }
+        //switch move up/down and move left/right
+        if(this.xT == target.x) {
+            this.xFlag = 0;
+        } else if(this.xT == target.x + target.width) {
+            this.xFlag = 1;
+        } else if(this.yT == target.y) {
+            this.yFlag = 0;
+        } else if(this.yT == target.y + target.height) {
+            this.yFlag = 1;
         }
     }
-    spawnPower(powers,targets) {
-        powers.array.push(new Pow(targets.x,targets.y,targets.width,targets.height,"add-ball"));
+    spawnPower(powers,targets,powName) {
+        powers.array.push(new Pow(targets.x,targets.y,targets.width,targets.height,powName));
     }
 
     whenTouch(pad) {
@@ -132,18 +134,40 @@ class Bal {
     }
     whenTouchTargets(powers, targets){
         for(let i = 0; i < targets.length; i++) {
-            if(this.isTouch(targets[i]) && targets[i].canTouch) {
-                this.modDirection(targets[i]);
+            if(this.isTouch(targets[i])) {
                 if(!targets[i].isWall) {
-                    if(Math.floor(Math.random() * 10) >= 5) {
-                        this.spawnPower(powers, targets[i]);
+                    if(Math.floor(Math.random() * 10) >= 7) {       //percentage of spawning powers
+                        let j = Math.floor(Math.random()*5);
+                        switch(j) {
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                                this.spawnPower(powers, targets[i],"add-ball");
+                                break;
+                            case 4:
+                                this.spawnPower(powers, targets[i],"rocket");
+                                break;
+                        }
                     }
-                    targets[i].goDown = true;
-                    targets[i].canTouch = false;
                 }
-            }
-            if (targets[i].y >= canvas.height && !targets[i].canTouch) {
-                targets[i] = 0;
+                switch(this.isHasPower) {
+                    case "no-power":
+                        if(targets[i].canTouch) {
+                            this.modDirection(targets[i]);
+                            if(!targets[i].isWall) {
+                                targets[i].goDown = true;
+                                targets[i].canTouch = false;
+                            }
+                        }
+                        if (targets[i].y >= canvas.height && !targets[i].canTouch) {
+                            targets[i] = 0;
+                        }
+                        break;
+                    case "rocket":
+                        targets[i] = 0;
+                        break;
+                }
             }
         }
     }
@@ -177,8 +201,15 @@ class Bal {
         }
         ctx.beginPath();
         ctx.arc(this.x,this.y,this.radius,0,2*Math.PI);
-        ctx.fillStyle = "blue";
-        ctx.fill()
+        switch(this.isHasPower) {
+            case "no-power":
+                ctx.fillStyle = "blue";
+                break;
+            case "rocket":
+                ctx.fillStyle = "red";
+                break;
+        }
+        ctx.fill();
     }
 }
 
@@ -208,9 +239,12 @@ class Balls {
                         this.array[i].whenTouchTargets(powers,targets.array);
                         this.array[i].whenTouchBorder();
                         break;
+                    case "rocket":
+                        this.array[i].whenTouchTargets(powers,targets.array);
+                        break;
                 }
                 this.array[i].move();
-                if(this.array[i].y >= canvas.height) {
+                if(this.array[i].y >= canvas.height || this.array[i].y < -10) {
                     this.array[i] = 0;
                     console.log(this.array);
                 }
@@ -270,7 +304,9 @@ class Tar{
     display() {
         ctx.beginPath();
         if(!this.isWall){
-            ctx.fillStyle = "green";
+            if(this.canTouch) {
+                ctx.fillStyle = "green";
+            } else ctx.fillStyle = "LightGreen";
             ctx.strokeStyle = "white";
         } else {
             ctx.fillStyle = "gray";
@@ -281,41 +317,71 @@ class Tar{
     }
     move() {
         if(this.goDown) {
-            this.spVertical += 0.3;
+            this.spVertical += 0.7;
             this.y += this.spVertical;
         }
     }
 }
+
+// class Targets {
+//     constructor() {
+//         this.array = [];
+//         this.yEachRow = 0;
+//         this.tarHeight = 15;
+//     }
+//     setMaxInRow(number, yPos, checkPoint1, checkPoint2) {
+//         let x = 0;
+//         const WIDTH = canvas.width/number;
+//         for(let i = 0; i < number; i++) {
+//             let random = Math.floor(Math.random() * 10);
+//             if (random >= checkPoint1 && random < checkPoint2) {
+//                this.array.push(new Tar(x,yPos,WIDTH,this.tarHeight,true)); //wall
+//             } else if(random >= checkPoint2) {
+//                 this.array.push(new Tar(x,yPos,WIDTH,this.tarHeight,false)); //target
+//             } else this.array.push(0);
+//             x += WIDTH;
+//         }
+//     }
+//     setRows(maxInRow, rows){
+//         for(let i=0; i< rows; i++){
+//             if(i == rows-1){
+//                 this.setMaxInRow(maxInRow,this.yEachRow,7,10);
+//             } else if(i <= rows-2 && i >= rows-4){
+//                 this.setMaxInRow(maxInRow,this.yEachRow,8,8);
+//             } 
+//             else this.setMaxInRow(maxInRow,this.yEachRow,4,4);
+//             this.yEachRow+=this.tarHeight;
+//         };
+//     }
+//     display(){
+//         for(let i=0; i<this.array.length; i++){
+//             if(this.array[i]) {
+//                 this.array[i].display();
+//                 this.array[i].move();
+//             }
+//         }
+//     }
+// }
 
 class Targets {
     constructor() {
         this.array = [];
         this.yEachRow = 0;
         this.tarHeight = 15;
+        this.level;
     }
-    setMaxInRow(number, yPos, checkPoint1, checkPoint2) {
+    setMaxInRow(yPos, ...args) {
         let x = 0;
-        const WIDTH = canvas.width/number;
-        for(let i = 0; i < number; i++) {
-            let random = Math.floor(Math.random() * 10);
-            if (random >= checkPoint1 && random < checkPoint2) {
-               this.array.push(new Tar(x,yPos,WIDTH,this.tarHeight,true)); //wall
-            } else if(random >= checkPoint2) {
+        const WIDTH = canvas.width/args.length;
+        for(let j = 0; j < args.length; j++){
+            if (args[j] == 1) {
+            this.array.push(new Tar(x,yPos,WIDTH,this.tarHeight,true)); //wall
+            } else if(args[j]==2) {
                 this.array.push(new Tar(x,yPos,WIDTH,this.tarHeight,false)); //target
             } else this.array.push(0);
             x += WIDTH;
         }
-    }
-    setRows(maxInRow, rows){
-        for(let i=0; i< rows; i++){
-            if(i == rows-1){
-                this.setMaxInRow(maxInRow,this.yEachRow,7,10);
-            } else if(i <= rows-2 && i >= rows-4){
-                this.setMaxInRow(maxInRow,this.yEachRow,8,8);
-            } 
-            else this.setMaxInRow(maxInRow,this.yEachRow,4,4);
-            this.yEachRow+=this.tarHeight;
-        };
+        this.yEachRow+=this.tarHeight;
     }
     display(){
         for(let i=0; i<this.array.length; i++){
@@ -346,34 +412,51 @@ class Pow {
         } else return false;
     }
     powerSelect(balls){
+        let bal;
+        let x,y;
         switch(this.power) {
             case "add-ball":
-                let bal = new Bal(6, "no-power");
-                let x,y;
-                for(let i=0; i<balls.array.length ; i++) {
-                    if(typeof balls.array[i] == "object"){
-                        if(balls.array[i].spHorizon > balls.array[i].spVertical) {
-                            bal.spHorizon = balls.array[i].spHorizon/2;
-                            bal.spVertical = Math.sqrt(balls.array[i].speed**2 - bal.spHorizon**2);
-                        } else {
-                            bal.spVertical = balls.array[i].spVertical/2;
-                            bal.spHorizon = Math.sqrt(balls.array[i].speed**2 - bal.spVertical**2);
-                        }
-                        bal.xFlag = balls.array[i].xFlag;
+                bal = new Bal(6, "no-power");
+                for(let i=0; i<=balls.array.length-1 ; i++) {
+                    if(typeof balls.array[i] == "object" && balls.array[i].isHasPower == "no-power"){
+                        bal.spHorizon = balls.array[i].spVertical;
+                        bal.spVertical = balls.array[i].spHorizon;
                         bal.yFlag = balls.array[i].yFlag;
+                        bal.xFlag = balls.array[i].xFlag;
+                        // bal.spHorizon = balls.array[i].spHorizon;
+                        // bal.spVertical = balls.array[i].spVertical;
                         x = balls.array[i].x; 
                         y = balls.array[i].y;
-                        break;
-                    } 
+                        if(balls.array[i].yFlag == 0) {
+                            break;
+                        }
+                    }
                 }
-                balls.array.push(bal);
-                bal.getCoordinates(x,y);
+                break;
+            case "rocket":
+                bal = new Bal(6, "rocket");
+                x = this.x;
+                y = this.y;
+                bal.spVertical = 3;
+                bal.spHorizon = 0;
                 break;
         }
+        if(x && y) {
+            balls.array.push(bal);
+            bal.getCoordinates(x,y);
+        }
+        console.log(balls.array)
     }
     move() {
         ctx.beginPath();
-        ctx.fillStyle = "blue";
+        switch(this.power) {
+            case "add-ball":
+                ctx.fillStyle = "orange";
+                break;
+            case "rocket":
+                ctx.fillStyle = "purple";
+                break;
+        }
         ctx.strokeStyle = "white";
         ctx.strokeRect(this.x, this.y, this.width, this.height);
         ctx.fillRect(this.x,this.y,this.width,this.height);
@@ -412,7 +495,7 @@ class BouncingBall {
     display() {
         if(this.balls.isPlaying){
             ctx.clearRect(0,0,canvas.width,canvas.height);
-            this.targets.display(this.powers);
+            this.targets.display();
             this.pad.move();
             this.balls.display(this.pad,this.targets,this.powers);
             this.powers.display(this.pad,this.balls);
@@ -428,12 +511,31 @@ let game = new BouncingBall(80);
 game.balls.array.push(new Bal(6, "no-power"));
 game.pad.getCoordinates(canvas.width/2-game.pad.width/2);
 game.balls.array[0].getCoordinates(canvas.width/2,game.pad.y-game.balls.array[0].radius);
-game.targets.setRows(30,15);
+// game.targets.setRows(30,15);
+game.targets.setMaxInRow(game.targets.yEachRow,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
+
 
 function animate(){
     setTimeout(() => {
-        game.display();
         requestAnimationFrame(animate);
+        game.display();
     }, 1000/90);
 }
 animate();
