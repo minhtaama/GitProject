@@ -1,5 +1,7 @@
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
+let ballImg = new Image();
+ballImg.src = "Ball.png";
 
 class Bal {
     constructor (radius,power) {
