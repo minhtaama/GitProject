@@ -7,13 +7,20 @@
     user-select:none;
     -webkit-tap-highlight-color:rgba(0, 0, 0, 0);
 }
+body {
+    background-image: url("source/background.png");
+    background-size: cover;
+}
+#logo {
+    width: 90%;
+}
 #canvas {
-    border: 1px solid black;
+    border: 3px solid black;
     width: 70vmin;
 }
 @media(max-width: 400px) {
     #canvas {
-        width: 95%;
+        width: 90%;
     }
 }
 #game {

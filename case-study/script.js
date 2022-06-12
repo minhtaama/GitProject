@@ -2,7 +2,22 @@ let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
 let noPowImg = new Image();
-noPowImg.src = "bouncy-ball.png";
+let rocketImg = new Image();
+let padImg = new Image();
+let wallImg = new Image();
+let tarImg = new Image();
+let tarDeadImg = new Image();
+let trsureRocketImg = new Image();
+let trsureAddBallImg = new Image();
+
+noPowImg.src = "source/no-power-ball.png";
+rocketImg.src = "source/rocket.png"
+padImg.src = "source/pad.png"
+wallImg.src = "source/wall.png"
+tarImg.src = "source/target.png"
+tarDeadImg.src = "source/target-dead.png"
+trsureRocketImg.src = "source/trsure-rocket.png"
+trsureAddBallImg.src = "source/trsure-add-ball.png"
 
 class Bal {
     constructor (radius,power) {
@@ -11,8 +26,8 @@ class Bal {
         this.y;
         this.xFlag = 0; //0: move left, 1: move right
         this.yFlag = 0; //0: move up, 1: move down
-        this.spHorizon = Math.sqrt(8);
-        this.spVertical = Math.sqrt(8);
+        this.spHorizon = Math.sqrt(12.5);
+        this.spVertical = Math.sqrt(12.5);
         this.xT;        //coordinates of nearest touch point on target
         this.yT;        //
         this.isHasPower = power;
@@ -187,6 +202,9 @@ class Bal {
             this.y += this.spVertical;                  //move bottom
         }
         if(this.yFlag == 0) {
+            if(this.isHasPower == "rocket") {
+                this.spVertical *=1.015;
+            }
             this.y -= this.spVertical;                  //move top
         }
         ctx.beginPath();
@@ -196,8 +214,7 @@ class Bal {
                 ctx.drawImage(noPowImg,this.x-this.radius,this.y-this.radius,this.radius*2,this.radius*2);
                 break;
             case "rocket":
-                ctx.fillStyle = "red";
-                ctx.fill();
+                ctx.drawImage(rocketImg,this.x-this.radius,this.y-this.radius,this.radius*2,this.radius*4);
                 break;
         }
     }
@@ -246,7 +263,7 @@ class Balls {
 class Pad {
     constructor (width) {
         this.width = width;
-        this.height = 10;
+        this.height = 20;
         this.yFixed = canvas.height - 40;
         this.spVertical = 2;
         this.spHorizon = 6;
@@ -273,9 +290,10 @@ class Pad {
         if(this.goDown) {
             this.y += this.spVertical;
         }
-        ctx.beginPath();
-        ctx.fillStyle = "black";
-        ctx.fillRect(this.x,this.y,this.width,this.height);
+        //ctx.beginPath();
+        //ctx.fillStyle = "black";
+        //ctx.strokeRect(this.x,this.y,this.width,this.height);
+        ctx.drawImage(padImg,this.x, this.y, this.width,this.height);
     }
 }
 
@@ -292,22 +310,19 @@ class Tar{
         this.isWall = isWall;
     }
     display() {
-        ctx.beginPath();
+        //ctx.beginPath();
         if(!this.isWall){
             if(this.canTouch) {
-                ctx.fillStyle = "green";
-            } else ctx.fillStyle = "LightGreen";
+                ctx.drawImage(tarImg,this.x,this.y,this.width,this.height);
+            } else ctx.drawImage(tarDeadImg,this.x,this.y,this.width,this.height);;
             ctx.strokeStyle = "white";
         } else {
-            ctx.fillStyle = "gray";
-            ctx.strokeStyle = "white";
+            ctx.drawImage(wallImg,this.x,this.y,this.width,this.height);
         }
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
-        ctx.fillRect(this.x,this.y,this.width,this.height);
     }
     move() {
         if(this.goDown) {
-            this.spVertical += 0.7;
+            this.spVertical += 0.1;
             this.y += this.spVertical;
         }
     }
@@ -317,7 +332,7 @@ class Targets {
     constructor() {
         this.array = [];
         this.yEachRow = 0;
-        this.tarHeight = 15;
+        this.tarHeight = 32;
         this.level;
     }
     setMaxInRow(yPos, ...args) {
@@ -368,7 +383,7 @@ class Pow {
         let x,y;
         switch(this.power) {
             case "add-ball":
-                bal = new Bal(6, "no-power");
+                bal = new Bal(11, "no-power");
                 for(let i=0; i<=balls.array.length-1 ; i++) {
                     if(typeof balls.array[i] == "object" && balls.array[i].isHasPower == "no-power"){
                         bal.spHorizon = balls.array[i].spVertical;
@@ -386,7 +401,7 @@ class Pow {
                 }
                 break;
             case "rocket":
-                bal = new Bal(6, "rocket");
+                bal = new Bal(12, "rocket");
                 x = this.x;
                 y = this.y;
                 bal.spVertical = 3;
@@ -403,15 +418,12 @@ class Pow {
         ctx.beginPath();
         switch(this.power) {
             case "add-ball":
-                ctx.fillStyle = "orange";
+                ctx.drawImage(trsureAddBallImg,this.x,this.y,this.width,this.height);;
                 break;
             case "rocket":
-                ctx.fillStyle = "purple";
+                ctx.drawImage(trsureRocketImg,this.x,this.y,this.width,this.height);;
                 break;
         }
-        ctx.strokeStyle = "white";
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
-        ctx.fillRect(this.x,this.y,this.width,this.height);
         this.y += this.spVertical;
     }
 }
@@ -446,7 +458,8 @@ class BouncingBall {
     }
     display() {
         if(this.balls.isPlaying){
-            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = "white"
+            ctx.fillRect(0,0,canvas.width,canvas.height);
             this.targets.display();
             this.pad.move();
             this.balls.display(this.pad,this.targets,this.powers);
@@ -461,29 +474,26 @@ class BouncingBall {
 
 window.onload = function() {
 
-    let game = new BouncingBall(80);
-    game.balls.array.push(new Bal(6, "no-power"));
+    let game = new BouncingBall(160);
+    game.balls.array.push(new Bal(11, "no-power"));
     game.pad.getCoordinates(canvas.width/2-game.pad.width/2);
     game.balls.array[0].getCoordinates(canvas.width/2,game.pad.y-game.balls.array[0].radius);
     // game.targets.setRows(30,15);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
     
     
     function animate(){
