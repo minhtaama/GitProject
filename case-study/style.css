@@ -11,6 +11,11 @@
     border: 1px solid black;
     width: 70vmin;
 }
+@media(max-width: 400px) {
+    #canvas {
+        width: 95%;
+    }
+}
 #game {
     text-align: center;
 }

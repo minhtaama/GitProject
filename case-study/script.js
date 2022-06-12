@@ -1,7 +1,8 @@
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
-let ballImg = new Image();
-ballImg.src = "Ball.png";
+
+let noPowImg = new Image();
+noPowImg.src = "bouncy-ball.png";
 
 class Bal {
     constructor (radius,power) {
@@ -12,7 +13,6 @@ class Bal {
         this.yFlag = 0; //0: move up, 1: move down
         this.spHorizon = Math.sqrt(8);
         this.spVertical = Math.sqrt(8);
-        this.touchBorderBottom = 0;
         this.xT;        //coordinates of nearest touch point on target
         this.yT;        //
         this.isHasPower = power;
@@ -40,17 +40,6 @@ class Bal {
         } else if (this.y > target.y  && this.y < target.y + target.height) {
             this.yT = this.y;
         }
-        // /drawRange///
-        //     ctx.beginPath();
-        //     ctx.arc(this.xT,this.yT,2,0,2*Math.PI);
-        //     ctx.fillStyle = "blue";
-        //     ctx.fill();
-        //     ctx.beginPath();
-        //     ctx.moveTo(this.x,this.y);
-        //     ctx.lineTo(this.xT,this.yT);
-        //     ctx.strokeStyle = "gray";
-        //     ctx.stroke();
-        // ////////////
         range = Math.sqrt((this.x - this.xT)**2 + (this.y - this.yT)**2) - this.radius;
         if (range <= 0 && target.canTouch) {
             //offset ball(x,y) to not go inside target if target is moving
@@ -184,7 +173,6 @@ class Bal {
             this.yFlag = 1;
         }
         // if(this.y + this.radius >= canvas.height) {     //if touch bottom
-        //     this.touchBorderBottom = 1;
         //     this.yFlag = 0;
         // }
     }
@@ -205,13 +193,13 @@ class Bal {
         ctx.arc(this.x,this.y,this.radius,0,2*Math.PI);
         switch(this.isHasPower) {
             case "no-power":
-                ctx.fillStyle = "blue";
+                ctx.drawImage(noPowImg,this.x-this.radius,this.y-this.radius,this.radius*2,this.radius*2);
                 break;
             case "rocket":
                 ctx.fillStyle = "red";
+                ctx.fill();
                 break;
         }
-        ctx.fill();
     }
 }
 
@@ -325,46 +313,6 @@ class Tar{
     }
 }
 
-// class Targets {
-//     constructor() {
-//         this.array = [];
-//         this.yEachRow = 0;
-//         this.tarHeight = 15;
-//     }
-//     setMaxInRow(number, yPos, checkPoint1, checkPoint2) {
-//         let x = 0;
-//         const WIDTH = canvas.width/number;
-//         for(let i = 0; i < number; i++) {
-//             let random = Math.floor(Math.random() * 10);
-//             if (random >= checkPoint1 && random < checkPoint2) {
-//                this.array.push(new Tar(x,yPos,WIDTH,this.tarHeight,true)); //wall
-//             } else if(random >= checkPoint2) {
-//                 this.array.push(new Tar(x,yPos,WIDTH,this.tarHeight,false)); //target
-//             } else this.array.push(0);
-//             x += WIDTH;
-//         }
-//     }
-//     setRows(maxInRow, rows){
-//         for(let i=0; i< rows; i++){
-//             if(i == rows-1){
-//                 this.setMaxInRow(maxInRow,this.yEachRow,7,10);
-//             } else if(i <= rows-2 && i >= rows-4){
-//                 this.setMaxInRow(maxInRow,this.yEachRow,8,8);
-//             } 
-//             else this.setMaxInRow(maxInRow,this.yEachRow,4,4);
-//             this.yEachRow+=this.tarHeight;
-//         };
-//     }
-//     display(){
-//         for(let i=0; i<this.array.length; i++){
-//             if(this.array[i]) {
-//                 this.array[i].display();
-//                 this.array[i].move();
-//             }
-//         }
-//     }
-// }
-
 class Targets {
     constructor() {
         this.array = [];
@@ -377,10 +325,12 @@ class Targets {
         const WIDTH = canvas.width/args.length;
         for(let j = 0; j < args.length; j++){
             if (args[j] == 1) {
-            this.array.push(new Tar(x,yPos,WIDTH,this.tarHeight,true)); //wall
+                this.array.push(new Tar(x,yPos,WIDTH,this.tarHeight,true)); //wall
             } else if(args[j]==2) {
                 this.array.push(new Tar(x,yPos,WIDTH,this.tarHeight,false)); //target
-            } else this.array.push(0);
+            } else if(args[j]==0) {
+                this.array.push(0);
+            }
             x += WIDTH;
         }
         this.yEachRow+=this.tarHeight;
@@ -507,67 +457,70 @@ class BouncingBall {
 
 
 
+///////// RUN THE GAME /////////
 
+window.onload = function() {
 
-let game = new BouncingBall(80);
-game.balls.array.push(new Bal(6, "no-power"));
-game.pad.getCoordinates(canvas.width/2-game.pad.width/2);
-game.balls.array[0].getCoordinates(canvas.width/2,game.pad.y-game.balls.array[0].radius);
-// game.targets.setRows(30,15);
-game.targets.setMaxInRow(game.targets.yEachRow,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
-
-
-function animate(){
-    setTimeout(() => {
-        requestAnimationFrame(animate);
-        game.display();
-    }, 1000/90);
-}
-animate();
-
-document.addEventListener("keydown",(e)=>{
-    if(e.key == "ArrowLeft") {
+    let game = new BouncingBall(80);
+    game.balls.array.push(new Bal(6, "no-power"));
+    game.pad.getCoordinates(canvas.width/2-game.pad.width/2);
+    game.balls.array[0].getCoordinates(canvas.width/2,game.pad.y-game.balls.array[0].radius);
+    // game.targets.setRows(30,15);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
+    
+    
+    function animate(){
+        //setTimeout(() => {
+            game.display();
+            requestAnimationFrame(animate);
+        //}, 1000/144);
+    }
+    animate();
+    
+    document.addEventListener("keydown",(e)=>{
+        if(e.key == "ArrowLeft") {
+            game.pad.goLeft = true;
+        }
+        if(e.key == "ArrowRight") {
+            game.pad.goRight = true;
+        }
+    })
+    document.addEventListener("keyup", (e) => {
+        if (e.key == "ArrowLeft") {
+            game.pad.goLeft = false;
+        }
+        if (e.key == "ArrowRight") {
+            game.pad.goRight = false;
+        }
+    })
+    
+    document.getElementById("left").addEventListener("touchstart",(e)=>{
         game.pad.goLeft = true;
-    }
-    if(e.key == "ArrowRight") {
-        game.pad.goRight = true;
-    }
-})
-document.addEventListener("keyup", (e) => {
-    if (e.key == "ArrowLeft") {
+    })
+    document.getElementById("left").addEventListener("touchend",(e)=>{
         game.pad.goLeft = false;
-    }
-    if (e.key == "ArrowRight") {
+    })
+    document.getElementById("right").addEventListener("touchstart",(e)=>{
+        game.pad.goRight = true;
+    })
+    document.getElementById("right").addEventListener("touchend",(e)=>{
         game.pad.goRight = false;
-    }
-})
-
-document.getElementById("left").addEventListener("touchstart",(e)=>{
-    game.pad.goLeft = true;
-})
-document.getElementById("left").addEventListener("touchend",(e)=>{
-    game.pad.goLeft = false;
-})
-document.getElementById("right").addEventListener("touchstart",(e)=>{
-    game.pad.goRight = true;
-})
-document.getElementById("right").addEventListener("touchend",(e)=>{
-    game.pad.goRight = false;
-})
+    })
+}
