@@ -1,5 +1,5 @@
+@import url('http://fonts.cdnfonts.com/css/pixelsplitter');
 :root {
-    touch-callout:none;
     touch-action: none;
     user-select:none;
     -khtml-user-select:none;
@@ -11,23 +11,62 @@
 body {
     background-image: url("source/background.png");
     background-size: cover;
+    font-family: 'PixelSplitter', sans-serif;
+    color: aliceblue
 }
-#logo {
-    width: 90%;
-}
-#canvas {
-    border: 3px solid black;
-    width: 70vmin;
-}
-@media(max-width: 400px) {
-    #canvas {
-        width: 90%;
-    }
-}
+
+
 #game {
-    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-evenly;
+    align-items:flex-start;
 }
-#left, #right {
-    margin-top: 20px;
-    width: 120px;
+    #info {
+
+    }
+        #logo {
+            max-width: 300px;
+        }
+        #text {
+            
+        }
+    #content {
+        display: flex;
+        flex-direction: row;
+        justify-content:space-between;
+    }
+        #canvas {
+            border: 3px solid black;
+            height: 95vh;
+        }
+        #buttons {
+            display: flex;
+            flex-direction: column;
+            align-self: center;
+            align-items: center;
+            margin: 10px 10px 10px 10px;
+        }
+            #left, #right {
+                width: 4rem;
+            }
+
+
+@media(max-width: 400px) {    
+    #game {
+        flex-direction: column;
+        align-items:center;
+    }
+        #content {
+            flex-direction: column;
+        }
+            #canvas {
+                height: auto;
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #buttons {
+                flex-direction: row;
+            }
 }

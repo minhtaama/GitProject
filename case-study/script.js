@@ -152,16 +152,13 @@ class Bal {
         for(let i = 0; i < targets.length; i++) {
             if(this.isTouch(targets[i])) {
                 if(!targets[i].isWall) {
-                    if(Math.floor(Math.random() * 10) >= 7) {       //percentage of spawning powers
-                        let j = Math.floor(Math.random()*5);
+                    if(Math.floor(Math.random() * 11) >= 8) {       //percentage of spawning powers
+                        let j = Math.floor(Math.random()*7);
                         switch(j) {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
+                            case 0: case 1: case 2: case 3: case 4: case 5:
                                 this.spawnPower(powers, targets[i],"add-ball");
                                 break;
-                            case 4:
+                            case 6:
                                 this.spawnPower(powers, targets[i],"rocket");
                                 break;
                         }
@@ -176,14 +173,18 @@ class Bal {
                                 targets[i].canTouch = false;
                             }
                         }
-                        if (targets[i].y >= canvas.height && !targets[i].canTouch) {
-                            targets[i] = 0;
-                        }
                         break;
                     case "rocket":
-                        targets[i] = 0;
+                        if(targets[i].isWall) {
+                            targets[i] = -1;
+                        } else targets[i] = -2;
                         break;
                 }
+            }
+            if (targets[i].y >= canvas.height && !targets[i].canTouch) {
+                if(targets[i].isWall) {
+                    targets[i] = -1;
+                } else targets[i] = -2;
             }
         }
     }
@@ -388,7 +389,7 @@ class Targets {
     }
     display(){
         for(let i=0; i<this.array.length; i++){
-            if(this.array[i]) {
+            if(typeof this.array[i] == "object") {
                 this.array[i].display();
                 this.array[i].move();
             }
@@ -426,8 +427,6 @@ class Pow {
                         bal.spVertical = balls.array[i].spHorizon;
                         bal.yFlag = balls.array[i].yFlag;
                         bal.xFlag = balls.array[i].xFlag;
-                        // bal.spHorizon = balls.array[i].spHorizon;
-                        // bal.spVertical = balls.array[i].spVertical;
                         x = balls.array[i].x; 
                         y = balls.array[i].y;
                         if(balls.array[i].yFlag == 0) {
@@ -461,10 +460,7 @@ class Pow {
         console.log(balls.array)
     }
     move() {
-        // ctx.save();
         ctx.beginPath();
-        // ctx.translate(this.x+this.width/2, this.y+this.height/2)
-        // ctx.rotate(10*Math.PI/180);
         switch(this.power) {
             case "add-ball":
                 ctx.drawImage(trsureAddBallImg,this.x,this.y,this.width,this.height);;
@@ -473,7 +469,6 @@ class Pow {
                 ctx.drawImage(trsureRocketImg,this.x,this.y,this.width,this.height);;
                 break;
         }
-        // ctx.restore();
         this.y += this.spVertical;
     }
 }
@@ -516,8 +511,19 @@ class BouncingBall {
             this.powers.display(this.pad,this.balls);
         }
     }
+    renderScore() {
+        let targets = this.targets.array.filter((el,idx,arr) => {
+            return el == -2;
+        })
+        let wall = this.targets.array.filter((el,idx,arr) => {
+            return el == -1;
+        })
+        let currballs = this.balls.array.filter((el,idx,arr) => {
+            return typeof el == "object";
+        })
+        document.getElementById("score").innerHTML = `(${targets.length} + ${wall.length*50}) * ${currballs.length}`;
+    }
 }
-
 
 
 ///////// RUN THE GAME /////////
@@ -528,73 +534,91 @@ window.onload = function() {
     game.balls.array.push(new Bal(11, "no-power"));
     game.pad.getCoordinates(canvas.width/2-game.pad.width/2);
     game.balls.array[0].getCoordinates(canvas.width/2,game.pad.y-game.balls.array[0].radius);
-    // game.targets.setRows(30,15);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,0,0,0,0,0,0,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,0,0,0,0,0,0,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1);
     
     
     function animate(){
-        //setTimeout(() => {
             game.display();
+            game.renderScore();
             requestAnimationFrame(animate);
-        //}, 1000/144);
     }
     animate();
     
-    document.addEventListener("keydown",(e)=>{
-        if(e.key == "ArrowLeft") {
-            game.pad.goLeft = true;
-        }
-        if(e.key == "ArrowRight") {
-            game.pad.goRight = true;
-        }
-    })
-    document.addEventListener("keyup", (e) => {
-        if (e.key == "ArrowLeft") {
-            game.pad.goLeft = false;
-        }
-        if (e.key == "ArrowRight") {
-            game.pad.goRight = false;
-        }
-    })
     
     let ctxLeft = document.getElementById("left").getContext("2d");
     let ctxRight = document.getElementById("right").getContext("2d");
     ctxLeft.drawImage(leftBtnP,0,0,96,96);
     ctxRight.drawImage(rightBtn,0,0,96,96);
 
-    document.getElementById("left").addEventListener("touchstart",(e)=>{
-        game.pad.goLeft = true;
-        ctxLeft.clearRect(0,0,96,96);
-        ctxLeft.drawImage(leftBtnP,0,0,96,96);
-    })
-    document.getElementById("left").addEventListener("touchend",(e)=>{
-        game.pad.goLeft = false;
-        ctxLeft.clearRect(0,0,96,96)
-        ctxLeft.drawImage(leftBtn,0,0,96,96);
-    })
-    document.getElementById("right").addEventListener("touchstart",(e)=>{
-        game.pad.goRight = true;
-        ctxRight.clearRect(0,0,96,96);
-        ctxRight.drawImage(rightBtnP,0,0,96,96);
-    })
-    document.getElementById("right").addEventListener("touchend",(e)=>{
-        game.pad.goRight = false;
-        ctxRight.clearRect(0,0,96,96);
-        ctxRight.drawImage(rightBtn,0,0,96,96);
-    })
+    ["touchstart","mousedown"].forEach(val => {
+        document.getElementById("left").addEventListener(val,()=>{
+            game.pad.goLeft = true;
+            ctxLeft.clearRect(0,0,96,96);
+            ctxLeft.drawImage(leftBtnP,0,0,96,96);
+        });
+    });
+
+    ["touchend","mouseup"].forEach(val => {
+        document.getElementById("left").addEventListener(val,()=>{
+            game.pad.goLeft = false;
+            ctxLeft.clearRect(0,0,96,96);
+            ctxLeft.drawImage(leftBtn,0,0,96,96);
+        });
+    });
+
+    ["touchstart","mousedown"].forEach(val => {
+        document.getElementById("right").addEventListener(val,()=>{
+            game.pad.goRight = true;
+            ctxRight.clearRect(0,0,96,96);
+            ctxRight.drawImage(rightBtnP,0,0,96,96);
+        });
+    });
+
+    ["touchend","mouseup"].forEach(val => {
+        document.getElementById("right").addEventListener(val,()=>{
+            game.pad.goRight = false;
+            ctxRight.clearRect(0,0,96,96);
+            ctxRight.drawImage(rightBtn,0,0,96,96);
+        });
+    });
     
+    document.addEventListener("keydown",(e)=>{
+        if(e.key == "ArrowLeft") {
+            game.pad.goLeft = true;
+            ctxLeft.clearRect(0,0,96,96);
+            ctxLeft.drawImage(leftBtnP,0,0,96,96);
+            console.log(game.targets.array);
+        }
+        if(e.key == "ArrowRight") {
+            game.pad.goRight = true;
+            ctxRight.clearRect(0,0,96,96);
+            ctxRight.drawImage(rightBtnP,0,0,96,96);
+        }
+    })
+    document.addEventListener("keyup", (e) => {
+        if (e.key == "ArrowLeft") {
+            game.pad.goLeft = false;
+            ctxLeft.clearRect(0,0,96,96);
+            ctxLeft.drawImage(leftBtn,0,0,96,96);
+        }
+        if (e.key == "ArrowRight") {
+            game.pad.goRight = false;
+            ctxRight.clearRect(0,0,96,96);
+            ctxRight.drawImage(rightBtn,0,0,96,96);
+        }
+    })
 }
