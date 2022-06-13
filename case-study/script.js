@@ -19,6 +19,16 @@ tarDeadImg.src = "source/target-dead.png"
 trsureRocketImg.src = "source/trsure-rocket.png"
 trsureAddBallImg.src = "source/trsure-add-ball.png"
 
+let leftBtn = new Image();
+let leftBtnP = new Image();
+let rightBtn = new Image();
+let rightBtnP = new Image();
+
+leftBtn.src = "source/left.png"
+leftBtnP.src = "source/left-press.png"
+rightBtn.src = "source/right.png"
+rightBtnP.src = "source/right-press.png"
+
 class Bal {
     constructor (radius,power) {
         this.radius = radius;
@@ -193,9 +203,15 @@ class Bal {
     }
     move(){
         if(this.xFlag == 1) {
+            if (this.isHasPower == "rocket") {
+                this.spHorizon *= 1.015;
+            }
             this.x += this.spHorizon;                   //move right
         }
         if(this.xFlag == 0) {
+            if (this.isHasPower == "rocket") {
+                this.spHorizon *= 1.015;
+            }
             this.x -= this.spHorizon;                   //move left
         }
         if(this.yFlag == 1) {
@@ -264,7 +280,7 @@ class Pad {
     constructor (width) {
         this.width = width;
         this.height = 20;
-        this.yFixed = canvas.height - 40;
+        this.yFixed = canvas.height - 70;
         this.spVertical = 2;
         this.spHorizon = 6;
         this.canTouch = true;
@@ -280,20 +296,36 @@ class Pad {
     move(){
         if(this.goLeft && this.x > 0) {
             this.x -= this.spHorizon;
-        }
-        if(this.goRight && (this.x + this.width) < canvas.width) {
+            ctx.save();
+            ctx.translate(this.x + this.width/2, this.y + this.height/2);
+            ctx.rotate(-8*Math.PI/180);
+            if (this.goUp) {
+                this.y -= this.spVertical;
+            } if (this.goDown) {
+                this.y += this.spVertical;
+            }
+            ctx.drawImage(padImg,-this.width/2, -this.height/2, this.width,this.height);
+            ctx.restore();
+        } else if(this.goRight && (this.x + this.width) < canvas.width) {
             this.x += this.spHorizon;
-        }
-        if(this.goUp) {
+            ctx.save();
+            ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+            ctx.rotate(8 * Math.PI / 180);
+            if(this.goUp) {
+                this.y -= this.spVertical;
+            } if(this.goDown) {
+                this.y += this.spVertical;
+            }
+            ctx.drawImage(padImg, -this.width / 2, -this.height / 2, this.width, this.height);
+            ctx.restore();
+        } else {
+            if(this.goUp) {
             this.y -= this.spVertical;
+            } if(this.goDown) {
+                this.y += this.spVertical;
+            }
+            ctx.drawImage(padImg,this.x, this.y, this.width,this.height);
         }
-        if(this.goDown) {
-            this.y += this.spVertical;
-        }
-        //ctx.beginPath();
-        //ctx.fillStyle = "black";
-        //ctx.strokeRect(this.x,this.y,this.width,this.height);
-        ctx.drawImage(padImg,this.x, this.y, this.width,this.height);
     }
 }
 
@@ -314,8 +346,12 @@ class Tar{
         if(!this.isWall){
             if(this.canTouch) {
                 ctx.drawImage(tarImg,this.x,this.y,this.width,this.height);
-            } else ctx.drawImage(tarDeadImg,this.x,this.y,this.width,this.height);;
-            ctx.strokeStyle = "white";
+            } else {
+                ctx.save();
+                ctx.globalAlpha = 0.6;
+                ctx.drawImage(tarDeadImg,this.x,this.y,this.width,this.height);
+                ctx.restore();
+            }
         } else {
             ctx.drawImage(wallImg,this.x,this.y,this.width,this.height);
         }
@@ -378,7 +414,7 @@ class Pow {
             return true;
         } else return false;
     }
-    powerSelect(balls){
+    powerSelect(balls, pad){
         let bal;
         let x,y;
         switch(this.power) {
@@ -404,8 +440,18 @@ class Pow {
                 bal = new Bal(12, "rocket");
                 x = this.x;
                 y = this.y;
-                bal.spVertical = 3;
-                bal.spHorizon = 0;
+                if(pad.goLeft) {
+                    bal.spHorizon = Math.sqrt(1);
+                    bal.spVertical = Math.sqrt(8);
+                    bal.xFlag = 0;
+                } else if(pad.goRight) {
+                    bal.spHorizon = Math.sqrt(1);
+                    bal.spVertical = Math.sqrt(8);
+                    bal.xFlag = 1;
+                } else {
+                    bal.spHorizon = 0;
+                    bal.spVertical = 3;
+                }
                 break;
         }
         if(x && y) {
@@ -415,7 +461,10 @@ class Pow {
         console.log(balls.array)
     }
     move() {
+        // ctx.save();
         ctx.beginPath();
+        // ctx.translate(this.x+this.width/2, this.y+this.height/2)
+        // ctx.rotate(10*Math.PI/180);
         switch(this.power) {
             case "add-ball":
                 ctx.drawImage(trsureAddBallImg,this.x,this.y,this.width,this.height);;
@@ -424,6 +473,7 @@ class Pow {
                 ctx.drawImage(trsureRocketImg,this.x,this.y,this.width,this.height);;
                 break;
         }
+        // ctx.restore();
         this.y += this.spVertical;
     }
 }
@@ -437,7 +487,7 @@ class Powers {
             if(this.array[i]) {
                 this.array[i].move();
                 if(this.array[i].isTouch(pad)){
-                    this.array[i].powerSelect(balls);
+                    this.array[i].powerSelect(balls,pad);
                     this.array[i] = 0;
                 } else if(this.array[i].y >= canvas.height) {
                     this.array[i] = 0;
@@ -458,7 +508,7 @@ class BouncingBall {
     }
     display() {
         if(this.balls.isPlaying){
-            ctx.fillStyle = "white"
+            ctx.fillStyle = "#F9F6EE"
             ctx.fillRect(0,0,canvas.width,canvas.height);
             this.targets.display();
             this.pad.move();
@@ -521,16 +571,30 @@ window.onload = function() {
         }
     })
     
+    let ctxLeft = document.getElementById("left").getContext("2d");
+    let ctxRight = document.getElementById("right").getContext("2d");
+    ctxLeft.drawImage(leftBtnP,0,0,96,96);
+    ctxRight.drawImage(rightBtn,0,0,96,96);
+
     document.getElementById("left").addEventListener("touchstart",(e)=>{
         game.pad.goLeft = true;
+        ctxLeft.clearRect(0,0,96,96);
+        ctxLeft.drawImage(leftBtnP,0,0,96,96);
     })
     document.getElementById("left").addEventListener("touchend",(e)=>{
         game.pad.goLeft = false;
+        ctxLeft.clearRect(0,0,96,96)
+        ctxLeft.drawImage(leftBtn,0,0,96,96);
     })
     document.getElementById("right").addEventListener("touchstart",(e)=>{
         game.pad.goRight = true;
+        ctxRight.clearRect(0,0,96,96);
+        ctxRight.drawImage(rightBtnP,0,0,96,96);
     })
     document.getElementById("right").addEventListener("touchend",(e)=>{
         game.pad.goRight = false;
+        ctxRight.clearRect(0,0,96,96);
+        ctxRight.drawImage(rightBtn,0,0,96,96);
     })
+    
 }
