@@ -1,6 +1,7 @@
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
+let backgrdImg = new Image();
 let noPowImg = new Image();
 let rocketImg = new Image();
 let padImg = new Image();
@@ -10,6 +11,7 @@ let tarDeadImg = new Image();
 let trsureRocketImg = new Image();
 let trsureAddBallImg = new Image();
 
+backgrdImg.src = "source/level-1.png"
 noPowImg.src = "source/no-power-ball.png";
 rocketImg.src = "source/rocket.png"
 padImg.src = "source/pad.png"
@@ -503,12 +505,16 @@ class BouncingBall {
     }
     display() {
         if(this.balls.isPlaying){
-            ctx.fillStyle = "#F9F6EE"
-            ctx.fillRect(0,0,canvas.width,canvas.height);
+            //ctx.fillStyle = "#F9F6EE"
+            //ctx.fillRect(0,0,canvas.width,canvas.height);
+            ctx.drawImage(backgrdImg,0,0,canvas.width,canvas.height)
             this.targets.display();
             this.pad.move();
             this.balls.display(this.pad,this.targets,this.powers);
             this.powers.display(this.pad,this.balls);
+            ctx.shadowColor = "black"
+            ctx.shadowOffsetY = 2;
+            ctx.shadowBlur = 12;
         }
     }
     renderScore() {
@@ -521,7 +527,7 @@ class BouncingBall {
         let currballs = this.balls.array.filter((el,idx,arr) => {
             return typeof el == "object";
         })
-        document.getElementById("score").innerHTML = `(${targets.length} + ${wall.length*50}) * ${currballs.length}`;
+        document.getElementById("score").innerHTML = `Targets killed:${targets.length} | Wall destroyed: ${wall.length} | Current balls: ${currballs.length}`;
     }
 }
 
