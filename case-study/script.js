@@ -25,11 +25,15 @@ let leftBtn = new Image();
 let leftBtnP = new Image();
 let rightBtn = new Image();
 let rightBtnP = new Image();
+let fireBtn = new Image();
+let fireBtnP = new Image();
 
 leftBtn.src = "source/left.png"
 leftBtnP.src = "source/left-press.png"
 rightBtn.src = "source/right.png"
 rightBtnP.src = "source/right-press.png"
+fireBtn.src = "source/fire.png"
+fireBtnP.src = "source/fire-press.png"
 
 class Bal {
     constructor (radius,power) {
@@ -297,6 +301,9 @@ class Pad {
         this.y = this.yFixed;
     }
     move(){
+        ctx.shadowColor = "orange"
+        ctx.shadowOffsetY = 3;
+        ctx.shadowBlur = 12;
         if(this.goLeft && this.x > 0) {
             this.x -= this.spHorizon;
             ctx.save();
@@ -505,16 +512,13 @@ class BouncingBall {
     }
     display() {
         if(this.balls.isPlaying){
-            //ctx.fillStyle = "#F9F6EE"
-            //ctx.fillRect(0,0,canvas.width,canvas.height);
             ctx.drawImage(backgrdImg,0,0,canvas.width,canvas.height)
+            ctx.shadowColor = "black"
+            ctx.shadowBlur = 12;
             this.targets.display();
-            this.pad.move();
             this.balls.display(this.pad,this.targets,this.powers);
             this.powers.display(this.pad,this.balls);
-            ctx.shadowColor = "black"
-            ctx.shadowOffsetY = 2;
-            ctx.shadowBlur = 12;
+            this.pad.move();
         }
     }
     renderScore() {
@@ -527,7 +531,7 @@ class BouncingBall {
         let currballs = this.balls.array.filter((el,idx,arr) => {
             return typeof el == "object";
         })
-        document.getElementById("score").innerHTML = `Targets killed:${targets.length} | Wall destroyed: ${wall.length} | Current balls: ${currballs.length}`;
+        document.getElementById("score").innerHTML = `Score: ${targets.length + wall.length*50} || Balls: ${currballs.length}`;
     }
 }
 
@@ -553,8 +557,8 @@ window.onload = function() {
     game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
     game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
     game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
-    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1);
+    game.targets.setMaxInRow(game.targets.yEachRow,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1);
     
     
     function animate(){
@@ -567,8 +571,10 @@ window.onload = function() {
     
     let ctxLeft = document.getElementById("left").getContext("2d");
     let ctxRight = document.getElementById("right").getContext("2d");
-    ctxLeft.drawImage(leftBtnP,0,0,96,96);
+    let ctxFire = document.getElementById("fire").getContext("2d");
+    ctxLeft.drawImage(leftBtn,0,0,96,96);
     ctxRight.drawImage(rightBtn,0,0,96,96);
+    ctxFire.drawImage(fireBtn,0,0,96,96);
 
     ["touchstart","mousedown"].forEach(val => {
         document.getElementById("left").addEventListener(val,()=>{
@@ -583,6 +589,20 @@ window.onload = function() {
             game.pad.goLeft = false;
             ctxLeft.clearRect(0,0,96,96);
             ctxLeft.drawImage(leftBtn,0,0,96,96);
+        });
+    });
+    
+    ["touchstart","mousedown"].forEach(val => {
+        document.getElementById("fire").addEventListener(val,()=>{
+            ctxFire.clearRect(0,0,96,96);
+            ctxFire.drawImage(fireBtnP,0,0,96,96);
+        });
+    });
+
+    ["touchend","mouseup"].forEach(val => {
+        document.getElementById("fire").addEventListener(val,()=>{
+            ctxFire.clearRect(0,0,96,96);
+            ctxFire.drawImage(fireBtn,0,0,96,96);
         });
     });
 
