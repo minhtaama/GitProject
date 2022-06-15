@@ -102,7 +102,6 @@ class Bal {
                     break;
             }
             this.spVertical = Math.sqrt(this.speed**2 - this.spHorizon**2);
-            console.log("ball speed:",this.speed," /ball => vector:", this.spHorizon, "/ ball ^ vector:", this.spVertical);
         } else if(target.goRight) {
             switch(this.xFlag) {
                 case 0:
@@ -114,7 +113,6 @@ class Bal {
                     break;
             }
             this.spVertical = Math.sqrt(this.speed**2 - this.spHorizon**2);
-            console.log("ball speed:",this.speed," /ball => vector:", this.spHorizon, "/ ball ^ vector:", this.spVertical);
         } else {
             if(Math.floor(Math.random()*2)==0) {
                 this.spHorizon -= Math.sqrt(this.spHorizon**2/100);
@@ -144,7 +142,6 @@ class Bal {
             this.modDirection(pad);
             pad.y = pad.yFixed;
             pad.goDown = true;
-            console.log("touched");
         }
         if(pad.y - pad.yFixed >= 14) {
             pad.goDown = false;
@@ -276,7 +273,6 @@ class Balls {
                 this.array[i].move();
                 if(this.array[i].y >= canvas.height || this.array[i].y < -10) {
                     this.array[i] = 0;
-                    console.log(this.array);
                 }
             }
         }
@@ -627,7 +623,6 @@ window.onload = function() {
             game.pad.goLeft = true;
             ctxLeft.clearRect(0,0,96,96);
             ctxLeft.drawImage(leftBtnP,0,0,96,96);
-            console.log(game.targets.array);
         }
         if(e.key == "ArrowRight") {
             game.pad.goRight = true;
