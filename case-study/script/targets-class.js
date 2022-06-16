@@ -37,7 +37,6 @@ class Targets {
     constructor() {
         this.array = [];
         this.yEachRow = 0;
-        this.tarHeight = 32;
         this.level;
     }
     setMaxInRow(yPos, ...args) {
@@ -45,15 +44,15 @@ class Targets {
         const WIDTH = canvas.width/args.length;
         for(let j = 0; j < args.length; j++){
             if (args[j] == 1) {
-                this.array.push(new Tar(x,yPos,WIDTH,this.tarHeight,true)); //wall
+                this.array.push(new Tar(x,yPos,WIDTH,WIDTH,true)); //wall
             } else if(args[j]==2) {
-                this.array.push(new Tar(x,yPos,WIDTH,this.tarHeight,false)); //target
+                this.array.push(new Tar(x,yPos,WIDTH,WIDTH,false)); //target
             } else if(args[j]==0) {
                 this.array.push(0);
             }
             x += WIDTH;
         }
-        this.yEachRow+=this.tarHeight;
+        this.yEachRow+=WIDTH;
     }
     display(){
         for(let i=0; i<this.array.length; i++){

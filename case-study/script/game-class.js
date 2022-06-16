@@ -15,6 +15,8 @@ class BouncingBall {
             this.balls.display(this.pad,this.targets,this.powers);
             this.powers.display(this.pad,this.balls);
             this.pad.move();
+        } else {
+            
         }
     }
     renderScore() {
@@ -29,5 +31,12 @@ class BouncingBall {
         })
         document.getElementById("score").innerHTML = `Score: ${targets.length + wall.length*50}`;
         document.getElementById("balls").innerHTML = `Current Balls: ${currballs.length}`;
+    }
+    chooseLevel(num) {
+            document.getElementById("level").innerHTML = levels[num-1].name;
+            backgrdImg.src = levels[num-1].src;
+            for (let i = 0; i < levels[num-1].display.length; i++) {
+                this.targets.setMaxInRow(this.targets.yEachRow, ...levels[num-1].display[i]);
+            }
     }
 }

@@ -2,10 +2,6 @@
 window.onload = function() {
 
     let game = new BouncingBall(160);
-    game.balls.array.push(new Bal(11, "no-power"));
-    game.pad.getCoordinates(canvas.width/2-game.pad.width/2);
-    game.balls.array[0].getCoordinates(canvas.width/2,game.pad.y-game.balls.array[0].radius);
-    chooseLevel(level1,game);
     
     function animate(){
             game.display();
@@ -15,19 +11,20 @@ window.onload = function() {
     animate();
 
 
-
-    ///RENDER BUTTON
+    //PLAY BUTTON
     document.getElementById("btn").addEventListener("click", ()=> {
         game = new BouncingBall(160);
         game.balls.array.push(new Bal(11, "no-power"));
         game.pad.getCoordinates(canvas.width/2-game.pad.width/2);
         game.balls.array[0].getCoordinates(canvas.width/2,game.pad.y-game.balls.array[0].radius);
-        chooseLevel(level1,game);
+        game.chooseLevel(document.getElementById("levels").value);
         if(!game.balls.isPlaying) {
             game.balls.isPlaying = true;
         }
     })
-
+    
+    
+    //RENDER GAME BUTTONS
     ctxLeft.beginPath();
     ctxLeft.drawImage(leftBtn,0,0,96,96);
     ctxRight.beginPath();
