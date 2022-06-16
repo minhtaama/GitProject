@@ -1,7 +1,11 @@
-///////// RUN THE GAME /////////
 window.onload = function() {
 
+    ////////////// RUN THE GAME ////////////////
     let game = new BouncingBall(160);
+    game.balls.array.push(new Bal(11, "no-power"));
+    game.pad.getCoordinates(canvas.width/2-game.pad.width/2);
+    game.balls.array[0].getCoordinates(canvas.width/2,game.pad.y-game.balls.array[0].radius);
+    game.chooseLevel(localStorage.getItem("level"));
     
     function animate(){
             game.display();
@@ -11,20 +15,26 @@ window.onload = function() {
     animate();
 
 
-    //PLAY BUTTON
-    document.getElementById("btn").addEventListener("click", ()=> {
+    /////////// NAVIGATION BUTTON /////////
+
+    document.getElementById("btn-restart").addEventListener("click", ()=> {
         game = new BouncingBall(160);
         game.balls.array.push(new Bal(11, "no-power"));
         game.pad.getCoordinates(canvas.width/2-game.pad.width/2);
         game.balls.array[0].getCoordinates(canvas.width/2,game.pad.y-game.balls.array[0].radius);
-        game.chooseLevel(document.getElementById("levels").value);
+        game.chooseLevel(localStorage.getItem("level"));
         if(!game.balls.isPlaying) {
             game.balls.isPlaying = true;
         }
     })
+
+    document.getElementById("btn-back").addEventListener("click", () => {
+        location.href = "index.html";
+    })
     
     
-    //RENDER GAME BUTTONS
+    ///////// RENDER GAME BUTTONS WITH CANVAS ///////////
+    
     ctxLeft.beginPath();
     ctxLeft.drawImage(leftBtn,0,0,96,96);
     ctxRight.beginPath();

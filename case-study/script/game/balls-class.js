@@ -35,7 +35,7 @@ class Bal {
             this.yT = this.y;
         }
         range = Math.sqrt((this.x - this.xT)**2 + (this.y - this.yT)**2) - this.radius;
-        if (range <= 0 && target.canTouch) {
+        if (range <= 0) {
             //offset ball(x,y) to not go inside target if target is moving
             if (this.x <= target.x) {
                 this.x -= target.spHorizon; 
@@ -132,13 +132,10 @@ class Bal {
                 }
                 switch(this.isHasPower) {
                     case "no-power":
-                        if(targets[i].canTouch) {
                             this.modDirection(targets[i]);
                             if(!targets[i].isWall) {
-                                targets[i].goDown = true;
-                                targets[i].canTouch = false;
+                                targets[i] = -2;
                             }
-                        }
                         break;
                     case "rocket":
                         if(targets[i].isWall) {
@@ -146,11 +143,6 @@ class Bal {
                         } else targets[i] = -2;
                         break;
                 }
-            }
-            if (targets[i].y >= canvas.height && !targets[i].canTouch) {
-                if(targets[i].isWall) {
-                    targets[i] = -1;
-                } else targets[i] = -2;
             }
         }
     }
@@ -206,7 +198,7 @@ class Bal {
 class Balls {
     constructor() {    
         this.array = [];
-        this.isPlaying = false;
+        this.isPlaying = true;
     }
     isEnd() {
         let count = 0;

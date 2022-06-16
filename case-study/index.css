@@ -1,0 +1,70 @@
+@import url('http://fonts.cdnfonts.com/css/pixelsplitter');
+:root {
+    touch-action: none;
+    user-select:none;
+    -khtml-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+    -webkit-tap-highlight-color:rgba(0, 0, 0, 0);
+}
+
+html {
+    background-image: url("source/background.png");
+    background-size: cover;
+    font-family: 'PixelSplitter', sans-serif;
+    color: aliceblue;
+    text-align: center;
+}
+
+.small-text {
+    font-size: 0.8rem;
+}
+
+[type=radio] { 
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+[type=radio]:checked + div {
+    outline: 2px solid #f00;
+    color: #f00
+}
+
+[type=radio]:disabled + div {
+    color: gray;
+}
+
+#lev-div {
+    max-width: 800px;
+    margin: 0 auto 1rem auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.box {
+    width: 10rem;
+    height: 10rem;
+    box-shadow: 0px 10px 12px black;
+    margin: 0.3rem;
+}
+
+.box > p {
+    position: relative;
+    top: 22%;
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 1.3rem;
+}
+
+#logo {
+    width: 50vw;
+}
+
+@media(max-width: 400px) {    
+    
+}

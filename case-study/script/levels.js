@@ -1,6 +1,5 @@
-
 let levels = [
-        {   name: "Level 1",
+        {   name: "easy as fuck",
             display: [
                 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
                 [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
@@ -18,7 +17,7 @@ let levels = [
                 [1,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
                 [1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1],
             ],
-            src: "source/level-1.png"
+            src: "source/level-1.png",
         },
         {   name: "Level 2",
             display: [
@@ -37,7 +36,7 @@ let levels = [
                 [1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1],
                 [1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1],
             ],
-            src: "source/level-1.png"
+            src: "source/level-1.png",
         },
         {   name: "Level 3",
             display: [
@@ -57,15 +56,12 @@ let levels = [
                 [1,0,0,1,1,1,1,1,1,1,1,1],
                 [1,0,0,1,1,1,1,1,1,1,1,2]
             ],
-            src: "source/level-1.png"
+            src: "source/level-1.png",
         },
-    
+        {   name: "TEST",
+            display: [
+                [2,2],
+            ],
+            src: "source/level-1.png",
+        },
     ]
-
-for(let i = 0; i<levels.length; i++) {
-    let sel = document.getElementById("levels");
-    let opt = sel.appendChild(document.createElement("option"));
-    opt.setAttribute("id",`level${i+1}`);
-    opt.setAttribute("value",`${i+1}`);
-    opt.innerHTML = `Level ${i+1}`
-}

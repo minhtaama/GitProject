@@ -7,20 +7,12 @@ class Tar{
         this.spHorizon = 0;
         this.spVertical = 1;
         this.goDown = false;
-        this.canTouch = true;
         this.isWall = isWall;
     }
     display() {
         ctx.beginPath();
         if(!this.isWall){
-            if(this.canTouch) {
-                ctx.drawImage(tarImg,this.x,this.y,this.width,this.height);
-            } else {
-                ctx.save();
-                ctx.globalAlpha = 0.6;
-                ctx.drawImage(tarDeadImg,this.x,this.y,this.width,this.height);
-                ctx.restore();
-            }
+            ctx.drawImage(tarImg,this.x,this.y,this.width,this.height);
         } else {
             ctx.drawImage(wallImg,this.x,this.y,this.width,this.height);
         }
