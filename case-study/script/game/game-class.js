@@ -20,14 +20,13 @@ class BouncingBall {
         } else if(this.isWin) {
             ctx.beginPath();
             ctx.fillStyle = "blue";
-            ctx.fillRect(30,30,canvas.width,canvas.height);
+            ctx.fillRect(canvas.width/8,canvas.height/4,canvas.width/8*6,canvas.height/2);
             if(this.score > localStorage.getItem(`level-${localStorage.getItem("level")}`)) {
                 localStorage.setItem(`level-${localStorage.getItem("level")}`, this.score);
             }
         } else if(!this.isWin && !this.balls.isPlaying) {
             ctx.beginPath();
-            ctx.fillStyle = "green";
-            ctx.fillRect(30,30,canvas.width,canvas.height);
+            ctx.drawImage(youloseImg,0,0,canvas.width,canvas.height);
             if(this.score > localStorage.getItem(`level-${localStorage.getItem("level")}`)) {
                 localStorage.setItem(`level-${localStorage.getItem("level")}`, this.score);
             }

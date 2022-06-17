@@ -14,6 +14,7 @@ let tarImg = new Image();
 let tarDeadImg = new Image();
 let trsureRocketImg = new Image();
 let trsureAddBallImg = new Image();
+let youloseImg = new Image();
 
 noPowImg.src = "source/no-power-ball.png";
 rocketImg.src = "source/rocket.png"
@@ -21,6 +22,7 @@ padImg.src = "source/pad.png"
 wallImg.src = "source/wall.png"
 trsureRocketImg.src = "source/trsure-rocket.png"
 trsureAddBallImg.src = "source/trsure-add-ball.png"
+youloseImg.src = "source/you-lose.png"
 
 let leftBtn = new Image();
 let leftBtnP = new Image();
