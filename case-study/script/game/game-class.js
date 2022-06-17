@@ -52,6 +52,7 @@ class BouncingBall {
     chooseLevel(num) {
             document.getElementById("level").innerHTML = levels[num-1].name;
             backgrdImg.src = levels[num-1].src;
+            tarImg.src = levels[num-1].tar;
             for (let i = 0; i < levels[num-1].display.length; i++) {
                 this.targets.setMaxInRow(this.targets.yEachRow, ...levels[num-1].display[i]);
             }

@@ -9,11 +9,11 @@ for(let i = 0; i<levels.length; i++) {
 
     let div = label.appendChild(document.createElement("div"));
     div.setAttribute("class","box");
-    div.style.backgroundImage = `url('source/level-1.png')`;
+    div.style.backgroundImage = `url("${levels[i].src}")`;
     div.style.backgroundSize = `contain`;
     
     let name = div.appendChild(document.createElement("p"));
-    name.innerHTML += levels[i].name;
+    name.innerHTML += `level ${i+1}`;
     
     if (localStorage.getItem(`level-${i+1}`) == null) {
         levels[i].highScore = 0;

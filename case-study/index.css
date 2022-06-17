@@ -29,8 +29,8 @@ html {
 }
 
 [type=radio]:checked + div {
-    outline: 2px solid #f00;
-    color: #f00
+    outline: 4px solid #0ff;
+    color: white;
 }
 
 [type=radio]:disabled + div {
@@ -51,6 +51,7 @@ html {
     height: 10rem;
     box-shadow: 0px 10px 12px black;
     margin: 0.3rem;
+    border-radius: 0.5rem;
 }
 
 .box > p {
@@ -58,13 +59,28 @@ html {
     top: 22%;
     text-align: center;
     font-size: 1.5rem;
-    line-height: 1.3rem;
+    line-height: 1.7rem;
+    filter: drop-shadow(0 0 0.5rem black);
 }
 
 #logo {
     width: 50vw;
 }
 
+button {
+    font-family: inherit;
+    font-size: 2rem;
+    color: #30D1BC;
+    width: 80%;
+    max-width: 800px;
+    height: 5rem;
+    background-color: aliceblue;
+    border: 1px solid aliceblue;
+    border-radius: 0.3rem;
+    box-shadow: 0px 10px 12px black;
+}
 @media(max-width: 400px) {    
-    
+    #logo {
+        width: 90%;
+    }
 }
