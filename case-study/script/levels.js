@@ -56,7 +56,7 @@ let levels = [
             display: [
                 [2,2],
             ],
-            src: "source/level-bgr/mountain.png",
+            src: "source/level-bgr/dark-sky.png",
             tar: "source/level-bgr/blue-target.png",
         },
     ]

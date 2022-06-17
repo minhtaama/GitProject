@@ -23,6 +23,7 @@ for(let i = 0; i<levels.length; i++) {
 }
 
 let lev = document.getElementsByName("levels");
+lev[0].checked = true;
 
 document.getElementById("play").addEventListener("click", ()=> {
         for(let i = 0; i < lev.length; i++) {
