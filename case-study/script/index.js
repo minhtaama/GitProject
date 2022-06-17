@@ -33,3 +33,9 @@ document.getElementById("play").addEventListener("click", ()=> {
         location.href = "bouncing-ball.html";
     }   
 )
+
+document.getElementById("reset").addEventListener("click", ()=> {
+    localStorage.clear();
+    location.href = "index.html";
+    }
+)

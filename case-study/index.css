@@ -79,6 +79,15 @@ button {
     border-radius: 0.3rem;
     box-shadow: 0px 10px 12px black;
 }
+
+#reset {
+    margin-top: 1rem;
+    width: 30%;
+    max-width: 300px;
+    font-size: 1rem;
+    height: 3rem;
+}
+
 @media(max-width: 400px) {    
     #logo {
         width: 90%;
