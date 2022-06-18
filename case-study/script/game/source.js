@@ -17,7 +17,7 @@ let trsureAddBallImg = new Image();
 let youloseImg = new Image();
 
 noPowImg.src = "source/no-power-ball.png";
-rocketImg.src = "source/rocket.png"
+rocketImg.src = "source/super-ball.png"
 padImg.src = "source/pad.png"
 wallImg.src = "source/wall.png"
 trsureRocketImg.src = "source/trsure-rocket.png"

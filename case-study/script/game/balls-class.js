@@ -189,7 +189,7 @@ class Bal {
                 ctx.drawImage(noPowImg,this.x-this.radius,this.y-this.radius,this.radius*2,this.radius*2);
                 break;
             case "rocket":
-                ctx.drawImage(rocketImg,this.x-this.radius,this.y-this.radius,this.radius*2,this.radius*4);
+                ctx.drawImage(rocketImg,this.x-this.radius,this.y-this.radius,this.radius*2,this.radius*2);
                 break;
         }
     }
@@ -223,6 +223,7 @@ class Balls {
                         break;
                     case "rocket":
                         this.array[i].whenTouchTargets(powers,targets.array);
+                        this.array[i].whenTouchBorder();
                         break;
                 }
                 this.array[i].move();
